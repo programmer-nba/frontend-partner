@@ -7,8 +7,8 @@ import PrimeVue from "primevue/config";
 import "primeicons/primeicons.css"; //icons
 import "primevue/resources/primevue.min.css"; //core css
 import "primevue/resources/themes/lara-light-purple/theme.css"; //theme
+
 //prime flex
-import "primeflex/primeflex.css";
 import Chart from 'primevue/chart';
 import router from "./router";
 import routerPartner from "./router/partner";
@@ -61,13 +61,12 @@ app.use(store);
 try {
   const token = localStorage.getItem("token");
   const jwt_decode = jwtDecode(token);
+
   if (jwt_decode.position === "partner") {
     app.use(routerPartner);
-  } 
-   else {
+  } else {
     app.use(router);
   }
-  
 } catch (err) {
   app.use(router);
 }

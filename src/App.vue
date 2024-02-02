@@ -1,12 +1,13 @@
 <template >
   <div v-if="this.$store.getters.logedIn === true" class="" >
-    <NavberPartner v-if="this.$store.getters.position === 'partner'" />
+    <NavberPartner v-if="this.$store.getters.position === 'partner' && this.$store.getters.status_appover !== 'ยังกรอกข้อมูลไม่ครบ'" />
     <router-view  /> 
   </div>
 
   <div v-else>
     <LoginPage />
   </div>
+
   <Toast />
   <ConfirmDialog>
     <template #container="{ message, acceptCallback, rejectCallback}">
@@ -35,6 +36,7 @@
 <script>
 import LoginPage from '@/views/LoginView.vue';
 import NavberPartner from '@/components/template/NavbarPartner.vue';
+import jwtDecode from "jwt-decode";
 
 import axios from 'axios';
 // import jwtDecode from "jwt-decode";
@@ -45,8 +47,14 @@ export default {
     NavberPartner,
 
   },
-  async beforeCreate() {
-    if (localStorage.getItem("token") !== null) {
+  async mounted() {
+    if (localStorage.getItem("token")) {
+      const decode = jwtDecode(localStorage.getItem("token"));
+
+      console.log('Token:', localStorage.getItem("token"));
+      console.log('Decoded Token:', decode);
+
+
       await axios
         .get(`${process.env.VUE_APP_API}/partner/me/`, {
           headers: {
@@ -63,23 +71,25 @@ export default {
             lastname:res.data.data.lastname,
             nickname:res.data.data.nickname,
             position:res.data.data.position,
+            status_appover:decode.status_appover,
+
           };
+          console.log('position Token:', decode.position);
+          console.log('status จากโทเคน:', decode.status_appover);
+
+          console.log(res.data.data)
           this.$store.commit("setLogin", data_login);
           console.log(this.$store.getters.position);
-          if (this.$store.getters.position === 'partner') {
-              this.$router.push("/partner")
-          }
+  
 
           
         })
         .catch(() => {
           localStorage.clear();
-          this.$store.commit("ClearLogin");
           this.$router.push("/login");
         });
     } else {
       localStorage.clear();
-      this.$store.commit("ClearLogin");
       this.$router.push("/login");
     }
   }

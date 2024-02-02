@@ -10,7 +10,8 @@ export default createStore({
     partner_phone: "",
     partner_email:"",
     position:"",
-    status_otp:""
+    status_otp:"",
+    status_appover: "",
   },
   getters: {
     isLoading: (state) => state.isLoading,
@@ -23,6 +24,8 @@ export default createStore({
     partner_email:(state)=> state.partner_email,
     position: (state) => state.position,
     status_otp: (state) => state.status_otp,
+    status_appover: (state) => state.status_appover,
+
   },
   mutations: {
     setLoading(state, item) {
@@ -30,6 +33,7 @@ export default createStore({
     },
     setLogin(state, item) {
       (state.logedIn = item.logedIn),
+
         (state._id = item._id),
         (state.username = item.username),
         (state.partner_name = item.partner_name),
@@ -37,16 +41,11 @@ export default createStore({
         (state.partner_email = item.partner_email),
         (state.position = item.position);
         (state.status_otp = item.status_otp);
+        (state.status_appover = item.status_appover);
+
     },
-    ClearLogin(state) {
-      state.logedIn = false;
-      state._id = '';
-      state.username = '';
-      state.partner_name = '';
-      state.partner_phone = '';
-      state.partner_email = '';
-      state.position = '';
-      state.status_otp = '';
+    setLoginDefault(state) {
+      (state.token = ""), (state.logedIn = false);
     },
     setToken(state, item) {
       state.token = item;
