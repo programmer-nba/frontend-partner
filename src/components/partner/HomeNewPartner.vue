@@ -81,7 +81,7 @@
             </div>
           </div>
           <div class="flex justify-center items-center gap-2 my-3">
-            <button class="mt-6 block w-full select-none rounded-lg bg-[#285430] py-3 px-6 text-center 
+            <button @click="showDialog" class="mt-6 block w-full select-none rounded-lg bg-[#285430] py-3 px-6 text-center 
         align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-[#ADE792] transition-all 
         hover:shadow-lg hover:shadow-[#CFFF8D] focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] 
         active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" type="button">
@@ -134,7 +134,7 @@
                     </span>
                     <p class="flex items-center  text-white">
                       <span class=" mr-2 text-xs uppercase">IDCard:</span>
-                      <span>{{ userData.iden_number }}</span>
+                      <span>{{ userData.partner_iden_number }}</span>
                     </p>
                   </div>
                   <div class="flex flex-row text-sm">
@@ -248,6 +248,68 @@
     </main>
 
   </div>
+
+
+  <Dialog v-model:visible="visible" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+    :style="{ width: '750px', 'z-index': 1000 }">
+    <div class="max-w-2xl mx-auto bg-white p-16">
+
+
+<div class="grid gap-6 mb-6 lg:grid-cols-2">
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">username</label>
+    <input   type="text" placeholder="กรุณากรอก username"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">password</label>
+    <input  type="password"  placeholder="กรุณากรอก password"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อ - สกุล</label>
+    <input type="text"  placeholder="กรุณากรอกชื่อ - สกุล" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ที่อยู่</label>
+    <input type="text"  placeholder="กรุณากรอกที่อยู่" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เบอร์โทรศัพท์</label>
+    <input type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">บัตรประชาชน</label>
+    <input type="number"  placeholder="กรุณากรอกบัตรประชาชน"
+      
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อีเมล์</label>
+    <input type="text"  placeholder="กรุณากรอกอีเมล์" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+
+
+
+</div>
+
+
+
+<button  
+    @click=" adddata()"
+  class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+  focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  ">บันทึก</button>
+
+
+
+</div>
+  </Dialog>
+
 </template>
   
 <script>
@@ -264,14 +326,17 @@ export default {
       status_appover: "",
       isLoading: false,
       userData: {},
-      modal1Element: null,
+      visible: false,
+
     };
   },
   mounted() {
     this.loadUserData();
   },
   methods: {
-
+    showDialog() {
+      this.visible = true;
+    },
 
 
     async loadUserData() {
