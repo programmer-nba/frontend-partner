@@ -2,6 +2,8 @@
 module.exports = {
   content: [
     './src/views/LoginView.vue',
+    './src/views/Register.vue',
+
     './src/components/template/NavbarPartner.vue',
     './src/components/partner/HomeNewPartner.vue',
 

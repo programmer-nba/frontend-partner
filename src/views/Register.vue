@@ -1,7 +1,12 @@
 <template>
-    <Button class=" text-center  bg-blue-700 px-8 py-3 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-blue-500 hover:text-[#F1E7E0] w-full " style="border-radius: 1.5rem;"
-    @click="opendialog()" :loading="loading" label="สมัครสมาชิก" />
+  
 
+
+    <button type="button" @click="opendialog()" :loading="loading" class="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"> 
+   สมัครสมาชิก
+    </button>
+
+    
     <Dialog
     v-model:visible="dialog"
     :style="{ width: '50rem' }"
@@ -420,3 +425,10 @@
       partners.value.signature =""; // ลายเซ็น   
     }
 </script>
+
+
+<style scoped>
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+</style>

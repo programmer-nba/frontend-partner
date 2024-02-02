@@ -1,12 +1,12 @@
 <template>
-  <section class="bg-[#001B79] ">
+  <section class="bg-[#17594A] ">
     <nav class=" items-center justify-between flex-wrap  border-t-2
-  border-[#AEDEFC]   p-6 lg:flex lg:items-center lg:justify-between">
+  border-[#B6EB7A]   p-6 lg:flex lg:items-center lg:justify-between">
 
       <div class="flex justify-between lg:w-auto w-full lg:border-b-0 pl-6 pr-2 border-solid  
    pb-5 lg:pb-0">
         <div class="flex items-center flex-shrink-0 text-gray-800 mr-16">
-          <img src="../../assets/logo.png" :width="50" alt="" />
+          <img src="../../assets/000.png" :width="80" alt="" />
         </div>
 
         <!-- Mobile menu button -->
@@ -59,7 +59,7 @@
       </div>
 
       <button @click="confirmLogout"
-        :class="{ 'bg-[#F8DE22] text-[#15133C]': isMobile, 'bg-[#F8DE22] text-[#001B79]': !isMobile }"
+        :class="{ 'bg-[#FAF35E] text-[#15133C]': isMobile, 'bg-[#FAF35E] text-[#001B79]': !isMobile }"
         class="mt-4 block rounded-lg  px-6 py-2.5 text-center font-medium capitalize leading-5  hover:bg-[#F7FD04] lg:mt-0 lg:w-auto">
         ออกจากระบบ</button>
 
@@ -74,7 +74,6 @@
 <script>
 import Swal from 'sweetalert2';
 
-import { mapGetters } from 'vuex'; // Import mapGetters from Vuex
 
 export default {
   components: {

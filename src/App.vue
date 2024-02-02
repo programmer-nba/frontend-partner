@@ -1,6 +1,6 @@
 <template >
   <div v-if="this.$store.getters.logedIn === true" class="" >
-    <NavberPartner v-if="this.$store.getters.position === 'partner' && this.$store.getters.status_appover !== 'ยังกรอกข้อมูลไม่ครบ'" />
+    <NavberPartner v-if="this.$store.getters.position === 'partner' " />
     <router-view  /> 
   </div>
 

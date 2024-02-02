@@ -1,37 +1,49 @@
 <template>
-  <div class="flex h-screen w-full items-center justify-center bg-[#F1E7E0]  bg-no-repeat my-background">
-    <div class="rounded-xl bg-white px-16 py-6 lg:py-10 shadow-lg backdrop-blur-md sm:py-5 mx-10 xl:mr-0">
-      <form>
-      <div class="text-center">
-        <div class="mb-4 flex flex-col items-center">
-          <h1 class="text-black text-4xl m-5"> </h1>
-          <h1 class="mb-2 text-3xl font-bold text-[#342A4C]"> ยินดีต้อนรับเข้าสู่ระบบ Partner</h1>
-        </div>
-        <div class="mb-4 text-lg ">
-          <input v-model="username"
-            class="rounded-3xl  px-4 py-2 border border-solid border-gray-500  text-inherit  shadow-lg outline-none backdrop-blur-md w-full placeholder-slate-900"
-            type="text" name="name" placeholder="ชื่อผู้ใช้" />
-        </div>
-        <div class="mb-4 text-lg ">
-          <input v-model="password"
-            class="rounded-3xl  px-4 py-2 border border-solid border-gray-500 text-inherit  shadow-lg outline-none backdrop-blur-md w-full placeholder-slate-900"
-            type="Password" name="password" placeholder="รหัสผ่าน"  />
-        </div>
-        <div class="mt-4 flex justify-center text-md text-black">
-          <Button type="submit"
-            class=" text-center rounded-3xl bg-pink-500 px-8 py-3 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-pink-600 hover:text-[#F1E7E0] w-full "
-            @click="checklogin()" :loading="isLoading" label="ล็อคอิน" />
-           
-        </div>
-        <div class="mt-4 flex justify-center text-md text-black">
-        
-            <Register></Register>
-        </div>
+<section class="flex flex-col md:flex-row h-screen items-center">
 
+<div class="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
+  <img src="../assets/lo.jpg" alt="" class="w-full h-full object-cover">
+</div>
+
+<div class="bg-[#002416] w-full md:max-w-md lg:max-w-full md:mx-auto  md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
+      flex items-center justify-center">
+
+  <div class="w-full h-100">
+
+
+    <div class="text-center">
+            <h2 class="mt-6 mb-12 text-3xl font-bold text-[#C2F784]">
+              Log in
+            </h2>
+          </div>
+    
+      <div>
+        <label class="block text-[#F6FBF4]">Username</label>
+        <input v-model="username" type="text"  placeholder="กรอกชื่อผู้ใช้" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-[#A6FF96] focus:bg-white focus:outline-none" >
       </div>
-      </form>
-    </div>
+
+      <div class="mt-4">
+        <label class="block text-[#F6FBF4]">Password</label>
+        <input v-model="password" type="password"  placeholder="กรอกรหัสผ่าน" minlength="6" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-[#A6FF96]
+              focus:bg-white focus:outline-none" required>
+      </div>
+
+ 
+
+      <button    @click="checklogin()" :loading="isLoading"  class="w-full block bg-[#F0FF42] hover:bg-[#F7EC09] focus:bg-[#FFEE63] text-[#163020] font-semibold rounded-lg
+            px-4 py-3 mt-6">เข้าสู่ระบบ</button>
+
+
+    <hr class="my-6 border-gray-300 w-full">
+
+    <Register></Register>
+ 
+
+  
+
   </div>
+</div>
+</section>
   <Dialog
     v-model:visible="dialog_otp"
     :style="{ width: '35rem' }"
@@ -63,13 +75,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import axios from 'axios';
-import Register from './Register.vue';
-import { useStore } from "vuex";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
 import { Partner } from "@/service/partner";
+import Register from './Register.vue';
+
+import axios from 'axios';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+import { ref } from 'vue';
+import { useStore } from "vuex";
 const isLoading = ref(false);
 const username = ref('');
 const password = ref('');
@@ -237,7 +250,6 @@ body{
   margin: 0;
 }
 .my-background {
-  background-image: url('../assets/background.jpg');
   background-size: cover;
 
 }
