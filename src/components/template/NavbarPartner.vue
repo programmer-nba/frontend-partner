@@ -173,8 +173,6 @@ export default {
     logout() {
       localStorage.clear();
       this.$store.commit("setLoginDefault");
-      this.$router.push("/");
-
 
     },
 
