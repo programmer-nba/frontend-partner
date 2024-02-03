@@ -52,20 +52,20 @@
   >
   <template #header>
       <span
-        class="text-pink-500 font-bold"
+        class="text-green-800 font-bold"
         style="font-size: 1.25rem; font-weight: 700"
-        >ส่ง otp เพื่อยืนยันตัวตนในการสมาชิกครั้งแรก </span
+        >กรุณายืนยันส่ง otp เพื่อยืนยันตัวตนในการสมาชิกครั้งแรกของเบอร์โทรศัพท์ {{telephone}}  </span
       >
       
     </template>
     <div class="grid">
-        <div class="col-12 ">
+        <div class="col-12  my-5">
           <input v-model="otp"
             class="rounded-3xl  px-4 py-2 border border-solid border-gray-500  text-inherit  shadow-lg outline-none backdrop-blur-md w-full placeholder-slate-900"
             type="text" name="name" placeholder="กรุณากรอก otp " />
       </div>
       <div class="col-12" >
-        <Button class=" text-center rounded-3xl bg-pink-500 px-8 py-3 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-pink-600 hover:text-[#F1E7E0] w-full "
+        <Button class=" text-center rounded-3xl bg-green-800 px-8 py-3 text-white shadow-xl backdrop-blur-md transition-colors duration-300 hover:bg-green-600 hover:text-[#F1E7E0] w-full "
           @click="checkotp()" :loading="isLoading" label="ยืนยันตัวตน" />
 
       </div>
@@ -77,7 +77,7 @@
 <script setup>
 import { Partner } from "@/service/partner";
 import Register from './Register.vue';
-
+import "@/components/loadingStyle.css";
 import axios from 'axios';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
@@ -96,6 +96,7 @@ const partner = new Partner();
 const otp = ref("");
 const tokenotp = ref("");
 
+const telephone = ref("")
 const _id =ref("");
 const token2 = ref({});
 document.title = "ระบบสมาชิก partner";
@@ -128,7 +129,8 @@ const checklogin = async () => {
           isLoading.value = false;
          
           await sendotp(res.data.data._id)
-            
+          telephone.value = res?.data?.data?.partner_phone;
+
           _id.value = res.data.data._id;
           token2.value = res.data.token;
           

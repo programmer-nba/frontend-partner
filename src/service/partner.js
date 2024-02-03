@@ -190,28 +190,7 @@ export class Partner {
     return data;
   }
 
-  async AddBankBook(packageData,id) {
-    let data;
-    const config = {
-      method: "put",
-      headers: {
-        "token": this.#token,
-      },
-      url: `${this.#baseUrl}/partner/bankbook/${id}`,
-      data: packageData,
-    };
-    await axios(config)
-      .then((result) => {
-        if (result) {
-          data = result.data;
-        }
-      })
-      .catch((error) => {
-        data = error;
-      });
-
-    return data;
-  }
+  
   async AddIdcard(packageData,id) {
     let data;
     const config = {
@@ -234,14 +213,126 @@ export class Partner {
 
     return data;
   }
-  async AddSignature(packageData,id) {
+  async Addfilecompany(packageData,id) {
     let data;
     const config = {
       method: "put",
       headers: {
         "token": this.#token,
       },
-      url: `${this.#baseUrl}/partner/signature/${id}`,
+      url: `${this.#baseUrl}/partner/filecompany/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async AddLogo(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/logo/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+
+  async Addsignature(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/addsignature/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+
+  async Deletesignature(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/deletesignature/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async Getbypartnerid(id) {
+    let data;
+    const config = {
+      method: "get",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/byid/${id}`,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async EditPartner(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/${id}`,
       data: packageData,
     };
     await axios(config)
@@ -285,4 +376,98 @@ export class Partner {
 
     return data;
   }
+
+  async GetContract(id) {
+    let data;
+    const config = {
+      method: "get",
+      headers: {
+        "token": this.#token,
+      },
+      url: `https://api.nbadigital.tech/contract/all`,
+      
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async CancleContract(packageData,id){
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `https://api.nbadigital.tech/contract/cancle/${id}`,
+      data: packageData,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async AccpetContract(packageData,id){
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `https://api.nbadigital.tech/contract/validate/${id}`,
+      data: packageData,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async EditContract(packageData,id){
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `https://api.nbadigital.tech/contract/editing/${id}`,
+      data: packageData,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+ 
 }

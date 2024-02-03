@@ -56,6 +56,17 @@ export default createStore({
     closeLoading(state) {
       state.isLoading = false;
     },
+    ClearLogin(state) {
+      state.logedIn = false;
+      state._id = "",
+      state.username ="",
+      state.partner_name = "",
+      state.partner_phone = "",
+      state.partner_email = "",
+      state.position = "";
+      state.status_otp = "";
+      state.status_appover = "";
+    },
    
   },
   actions: {},

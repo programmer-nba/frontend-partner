@@ -21,12 +21,17 @@ const routes = [
     component: () => import("../components/partner/HomeNewPartner.vue"),
     beforeEnter: (to, from, next) => {
       const decode = jwtDecode(localStorage.getItem("token"));
-      if (decode.status_appover === "ยังกรอกข้อมูลไม่ครบ" || decode.status_appover === "อนุมัติแล้ว") {
+      if (decode.status_appover === "ยังกรอกข้อมูลไม่ครบ" ||decode.status_appover === "รออนุมัติ" || decode.status_appover === "อนุมัติแล้ว") {
         next();
       } else {
         next({ name: "partner" }); 
       }
     },
+  },
+  {
+    path:"/ContractByID/:id"  ,
+    name:"ContractByID",
+    component : ()=> import("../components/partner/contact.vue")
   }
 ];
 

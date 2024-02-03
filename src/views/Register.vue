@@ -1,4 +1,13 @@
 <template>
+  <div v-if="loading" class="overlay">
+    <div class="loader">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+
   <button type="button" @click="opendialog()" :loading="loading"
     class="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300">
     สมัครสมาชิก
@@ -143,16 +152,6 @@ const adddata = async () => {
     return false;
   }
 
-
-  $confirm.require({
-    message: "ต้องการสมัคร partner ใช่หรือไม่ ?",
-    header: "สมัคร partner",
-    icon: "pi pi-exclamation-triangle",
-    rejectClass: "bg-red-500 border-none",
-    acceptClass: "bg-blue-500 border-none",
-    acceptLabel: "ตกลง",
-    rejectLabel: "ยกเลิก",
-    accept: async () => {
       loading.value = true;
       const data = {
         username: partners.value.username,
@@ -172,6 +171,7 @@ const adddata = async () => {
             detail: "สมัครสมาชิกสำเร็จ",
             life: 3000,
           });
+          dialog.value = false;
         } else {
           if (res.response.status == 409) {
             $toast.add({
@@ -194,16 +194,14 @@ const adddata = async () => {
 
       loading.value = false;
 
-    },
-
-  });
+    
 };
 const add2 = async (res) => {
 
   await partner.AddPartner2(res.data).then(async (res) => {
     if (res.status == true) {
 
-      dialog.value = false;
+      
       $toast.add({
         severity: "success",
         summary: "แจ้งเตือน",

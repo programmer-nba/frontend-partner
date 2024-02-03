@@ -10,20 +10,7 @@
 
   <Toast />
   <ConfirmDialog>
-    <template #container="{ message, acceptCallback, rejectCallback}">
-            <div class="flex flex-column align-items-center p-5 surface-overlay border-round">
-                <div class="border-circle bg-blue-700 inline-flex justify-content-center align-items-center h-6rem w-6rem -mt-8">
-                    <i class="pi pi-question text-5xl text-white"></i>
-                </div>
-                <span class="font-bold text-2xl block mb-2 mt-4">{{ message.header }}</span>
-                <p class="mb-0">{{ message.message }}</p>
-                <div class="flex align-items-center gap-2 mt-4">
-                    <Button label="ตกลง" class="bg-blue-700 border-none" @click="acceptCallback"></Button>
-                    <Button label="ยกเลิก" severity="danger" outlined @click="rejectCallback"></Button>
-                </div>
-            </div>
-        </template>
-
+  
   </ConfirmDialog>
   <!-- dialog loading-->
   <Dialog class="border-0 shadow-none" :draggable="false" v-model:visible="this.$store.getters.loading" :closable="false"
@@ -120,6 +107,11 @@ export default {
 .font{
   font-family: 'Kanit' !important;
   src: url('@/assets/Kanit/Kanit-Regular.ttf') format('truetype') !important;
+}
+.p-button{
+
+  background-color: #1da750 !important;
+  border:none;
 }
 .p-component{
    font-family: 'Kanit';

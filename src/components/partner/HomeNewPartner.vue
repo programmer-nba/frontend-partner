@@ -73,8 +73,10 @@
 
         <div class="bg-white shadow rounded-lg p-10">
           <div class="flex flex-col gap-1 text-center items-center">
-            <img class="h-32 w-32 bg-white p-2 rounded-full shadow mb-4" src="../../assets/000.png">
-            <p class="font-semibold">{{ userData.partner_name }}</p>
+            <img class="h-32 w-32 bg-white p-2 rounded-full shadow mb-4" src="../../assets/000.png" v-if="userData?.logo ==''">
+            <img class="h-32 w-32 bg-white p-2 rounded-full shadow mb-4" :src="getImage(userData?.logo)" v-if="userData?.logo !=''">
+            <p class="font-semibold">ชื่อ-สกุล : {{ userData?.partner_name }}</p>
+            <p class="font-semibold">บริษัท : {{ userData?.partner_company_name }}</p>
             <div class="text-sm leading-normal text-gray-400 flex justify-center items-center">
 
 
@@ -220,29 +222,38 @@
                     class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
                     วันที่
                   </th>
-
+                  <th
+                    class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px">
+                    เลือกเซ็นต์สัญญา
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="partner in partners" :key="partner.id" class="text-gray-700 ">
-                  <th class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                    {{ partner.partner_name }}</th>
+                <tr  v-for="(item, index) in contact" :key="index"   class="text-gray-700 ">
+                  <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                  
+                    {{ item?.contractor?.name }}</td>
                   <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                     <span class="px-2 py-1 font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full">
-                      {{ partner.partner_status_promiss }} </span>
+                      {{ lastStatus(item.status) }} </span>
                   </td>
-                  <th class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                    {{ formatThaiDate(partner.createdAt) }}</th>
+                  <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                    {{ new Date(item?.contract_start)?.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) }}   - {{ new Date(item?.contract_end)?.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })  }}
+                  </td>
+                  <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                    <button  @click=" dialogcontact(item)" class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+                      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center " v-if="lastStatus(item.status) =='รอลงนาม'">เซ็นต์สัญญา</button>
+                  </td>
                 </tr>
-
-
+              </tbody>
+              <tbody v-if="contact.length == 0">
+                  <tr >
+                    <td colspan="4" class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-center">ไม่มีข้อมูล</td>
+                  </tr>
               </tbody>
             </table>
           </div>
         </div>
-
-
-
       </article>
 
     </main>
@@ -251,117 +262,516 @@
 
 
   <Dialog v-model:visible="visible" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-    :style="{ width: '750px', 'z-index': 1000 }">
-    <div class="max-w-2xl mx-auto bg-white p-16">
+    :style="{ width: '950px', 'z-index': 1000 }">
+    <div class="max-w-4xl mx-auto bg-white p-10">
 
-
-<div class="grid gap-6 mb-6 lg:grid-cols-2">
-  <div>
+  
+    <div class="grid gap-6 mb-6 lg:grid-cols-2">
+    <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">username</label>
-    <input   type="text" placeholder="กรุณากรอก username"
+    <input  v-model="username"   type="text" placeholder="กรุณากรอก username"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">password</label>
-    <input  type="password"  placeholder="กรุณากรอก password"
+    <input v-model="password"  type="password"  placeholder="กรุณากรอก password"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
-
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">คำนำหน้า</label>
+    <Dropdown v-model="antecedent" :options="optionantecedent" optionLabel="name" optionValue="name" placeholder="กรุณาเลือกคำนำหน้า"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-1   " />
+  </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อ - สกุล</label>
-    <input type="text"  placeholder="กรุณากรอกชื่อ - สกุล" 
+    <input type="text" v-model="partner_name"  placeholder="กรุณากรอกชื่อ - สกุล" 
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ที่อยู่</label>
-    <input type="text"  placeholder="กรุณากรอกที่อยู่" 
+    <input v-model="partner_address" type="text"  placeholder="กรุณากรอกที่อยู่" 
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เบอร์โทรศัพท์</label>
-    <input type="text" placeholder="กรุณากรอกเบอร์โทรศัพท์"
+    <input type="number" v-model="partner_phone" placeholder="กรุณากรอกเบอร์โทรศัพท์"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">บัตรประชาชน</label>
-    <input type="number"  placeholder="กรุณากรอกบัตรประชาชน"
+    <input type="number" v-model="partner_iden_number"  placeholder="กรุณากรอกบัตรประชาชน"
       
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อีเมล์</label>
-    <input type="text"  placeholder="กรุณากรอกอีเมล์" 
+    <input type="text" v-model="partner_email"  placeholder="กรุณากรอกอีเมล์" 
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
   </div>
+      </div>
 
+      <div class="grid gap-6 mb-6 lg:grid-cols-2">
+     
+    
+    
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อบริษัท</label>
+    <input type="text" v-model="partner_company_name"  placeholder="กรุณากรอกชื่อบริษัท" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เลขประจำตัวผู้เสียภาษี</label>
+    <input type="text" v-model="partner_company_number"  placeholder="กรุณากรอกเลขประจำตัวผู้เสียภาษี" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ที่อยู่บริษัท</label>
+    <input type="text" v-model="partner_company_address"  placeholder="กรุณากรอกที่อยู่บริษัท" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เบอร์โทรศัพท์บริษัท</label>
+    <input type="text" v-model="partner_company_phone"  placeholder="กรุณากรอกเบอร์โทรศัพท์บริษัท" 
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบบัตรประชาชน</label>
+    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(partner_iden_prview)" v-if="partner_iden_prview !=''">
+    <FileUpload
+          mode="basic"
+          name="demo[]" url="/api/upload"
+          chooseLabel="เลือกไฟล์ภาพบัตรประชาชน"
+          :auto="true"
+          class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+          @uploader="chooseidcard"
+          :customUpload="true"
+          :fileLimit="1"
+          v-if="partner_iden ==''"
+        />
+        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
+    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview)" v-if="filecompany_iden_prview !=''">
+    <FileUpload
+          mode="basic"
+          name="demo[]" url="/api/upload"
+          chooseLabel="เลือกไฟล์ภาพเอกสารบริษัท"
+          :auto="true"
+          class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+          @uploader="choosefilecompany"
+          :customUpload="true"
+          :fileLimit="1"
+          v-if="filecompany ==''"
+        />
+        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบ logo</label>
+    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(logo_prview)" v-if="logo_prview !=''">
+    <FileUpload
+          mode="basic"
+          name="demo[]" url="/api/upload"
+          chooseLabel="เลือกไฟล์ภาพlogo"
+          :auto="true"
+          class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+          @uploader="chooselogo"
+          :customUpload="true"
+          :fileLimit="1"
+          v-if="logo ==''"
+        />
+        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+  </div>
+    </div>
 
+    <div class="grid gap-6 mb-6 lg:grid-cols-2">
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อ - สกุลที่ลงนามสัญญา</label>
+          <input v-model="signature_name"  type="text" placeholder="กรุณากรอกชื่อ - สกุล"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แผนกที่ลงนามสัญญา</label>
+          <input v-model="signature_role"  type="text" placeholder="กรุณากรอกแผนก"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำแหน่งที่ลงนามสัญญา</label>
+          <input v-model="signature_position"  type="text" placeholder="กรุณากรอกตำแหน่ง"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+        </div>
+        <div>
 
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ลงลายเซ็นต์</label>
+          <div class="flex">
+              <div class="flex px-5">
+                <FileUpload
+                mode="basic"
+                name="demo[]" url="/api/upload"
+                chooseLabel="เลือกไฟล์ภาพลายเซ็นต์"
+                :auto="true"
+                class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+                @uploader="choosesignal"
+                :customUpload="true"
+                :fileLimit="1"
+                v-if="signature_sign ==''"
+                />
+                <div v-else class="text-2xl text-blue-700"> คุณได้เลือกภาพลายเซ็นต์</div>
+
+              </div>
+              <div class="flex">
+                <button  @click=" addsignal()"  class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  ">+</button>
+              </div>
+          </div>
+          
+        
+    </div> 
+    </div>
+    
+    <div class="grid py-3"> 
+      <div class="block w-full overflow-x-auto">
+        <table  class="items-center w-full bg-transparent border-collapse">
+          <thead>
+          <tr>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">รูปภาพ</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ชื่อ - สกุลที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">แผนกที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ตำแหน่งที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ลบ</th>
+          </tr>
+        </thead>
+        <tr v-for="(item, index) in signature" :key="index">
+          <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+            <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(item.sign)" v-if="userData?.logo !=''">
+          
+          </td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.name }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.role }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.position }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+          <button @click="deletesignal(item._id)" class="text-white bg-red-500 hover:bg-400 focus:ring-4 focus:outline-none focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">-</button>
+        </td>
+      </tr>
+      <tr v-if="signature.length<=0"  class="border">
+        <td colspan="4" class="text-center py-5">ไม่มีข้อมูล</td>
+      </tr>
+       </table>
+      </div>
+       
+    </div>
+<div class="flex justify-center mt-5">
+  <button  
+    @click=" editdata()"
+  class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+  focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  ">บันทึก</button>
 </div>
 
 
-
-<button  
-    @click=" adddata()"
-  class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
-  focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  ">บันทึก</button>
 
 
 
 </div>
   </Dialog>
+  <Dialog v-model:visible="dialog_contact" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+    :style="{ width: '950px', 'z-index': 1000 }">
+    <div class="max-w-4xl mx-auto bg-white ">
+      <div class="grid gap-6 mb-6 ">
+        <contact :data="contact_id" v-if="contact_id !=''"/>
+      </div>
+      
+      
+      <div class="grid gap-6 mb-6 text-center ">
+        <div>
+        
+    <FileUpload
+          mode="basic"
+          name="demo[]" url="/api/upload"
+          chooseLabel="แนบสลิปโอนเงิน"
+          :auto="true"
+          class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+          @uploader="choosesilp"
+          :customUpload="true"
+          :fileLimit="1"
+          v-if="silp ==''"
+        />
+        <div v-else class="text-2xl text-blue-700">  คุณได้อัพสลิปเงินแล้ว</div>
+  </div>
+      </div>
+  
+    <div class="grid gap-6 mb-6 lg:grid-cols-2">
+      
+      <div class="flex">
+          <div class="flex mx-5">
+           
+            <Dropdown v-model="signname" :options="optionsign" optionLabel="name" optionValue="_id" placeholder="กรุณาเลือกคนลงนาม"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-1   " />
+          
+          </div>
+          <div class="flex">
+            <button   @click="signatureadd()"  class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center  ">+</button>
+          </div>
+      </div>
+      
+    </div>
 
+    
+    <div class="grid py-3"> 
+      <div class="block w-full overflow-x-auto">
+        <table  class="items-center w-full bg-transparent border-collapse">
+          <thead>
+          <tr>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ชื่อ - สกุลที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">แผนกที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ตำแหน่งที่ลงนามสัญญา</th>
+            <th class="px-4 bg-gray-100 text-gray-500  align-middle border border-solid border-gray-200 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">ลบ</th>
+          </tr>
+        </thead>
+        <tr v-for="(item, index) in signdata" :key="index">
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.name }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.role }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.position }}</td>
+        <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+          <button @click="signaturedelete(item._id)" class="text-white bg-red-500 hover:bg-400 focus:ring-4 focus:outline-none focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">-</button>
+        </td>
+      </tr>
+      <tr v-if="signdata.length<=0"  class="border">
+        <td colspan="4" class="text-center py-5">ไม่มีข้อมูล</td>
+      </tr>
+       </table>
+      </div>
+       
+    </div>
+    <div class="flex justify-center mt-5">
+      <button  @click=" showpdpa()"
+      class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mx-2">ลงนามสัญญา</button>
+      <button  @click=" editcontact()"
+      class="text-white bg-orange-600 hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mx-2">แก้ไขสัญญา</button>
+      <button  @click=" canclecontact()"
+      class="text-white bg-red-600 hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">ยกเลิกลงนามสัญญา</button>
+    </div>
+  
+</div>
+  </Dialog>
+  <Dialog v-model:visible="pdpa" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
+    :style="{ width: '950px', 'z-index': 3000 }">
+    <div class="max-w-4xl mx-auto bg-white ">
+      <div class="grid gap-6  ">
+          <img src="../../assets/1.jpg" alt="">
+          <img src="../../assets/2.jpg" alt="">
+          <img src="../../assets/3.jpg" alt="">
+      </div>
+    <div class="flex justify-center mt-5">
+      <button  @click=" accpetcontact()" 
+      class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
+      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center mx-2">ลงนามสัญญา</button>
+    </div>
+</div>
+  </Dialog>  
 </template>
   
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
-
+import { Partner } from '@/service/partner';
+import "@/components/loadingStyle.css";
+import contact from './contact.vue';
 export default {
   components: {
-
+    contact
   },
+  setup() {
+        const partner = new Partner();
+        return { partner }
+    },
   data() {
     return {
       status_appover: "",
-      isLoading: false,
+      isLoading: true,
       userData: {},
       visible: false,
+      optionantecedent:[
+      { name: "นาย" },
+      { name: "นาง" },
+      { name: "นางสาว" }
+      ],
+      /// v-model
+      _id:"",
+      username:"",
+      password:"",
+      antecedent:"",
+      partner_name:"",
+      partner_phone:"",
+      partner_email:"",
+      partner_iden_number: "", 
+      partner_address: "", 
+      //บริษัท
+      partner_company_name: "",
+      partner_company_number:"",  // เลขประจำผู้เสียภาษี
+      partner_company_address:"", // ที่อยู่บริษัท
+      partner_company_phone:"", // เบอร์โทรบริษัท
+      
+      partner_iden: "", // เลขบัตรประชาชน
+      partner_iden_prview:"",
+      filecompany:"",
+      filecompany_iden_prview :"",
+      logo:"",
+      logo_prview:"",
 
+
+      signature_name:"",
+      signature_role:"",
+      signature_position:"",
+      signature_sign:"",
+      signature:[],
+
+      contact:[],
+
+      dialog_contact:false,
+      optionsign:[],
+      signname:"",
+      signdata:[],
+      silp:"",
+      contact_id :"",
+      pdpa:false,
     };
   },
   mounted() {
     this.loadUserData();
   },
   methods: {
+    showpdpa(){
+      this.pdpa = true;
+    },
     showDialog() {
       this.visible = true;
     },
 
+    async accpetcontact (){
+        this.isLoading =true;
+        const data ={}
+        await this.partner.AccpetContract(data,this.contact_id).then(async (res) => {
+          if (res.status == true) {
+            this.$toast.add({
+                severity: "success",
+                summary: "แจ้งเตือน",
+                detail: "ลงนามสัญญาสำเร็จ",
+                life: 3000,
+            });
+          }
+            
+            await this.getcontact();
+            this.dialog_contact = false;
+        })
+        this.isLoading = false;
+    },
+    async editcontact(){
+      this.isLoading =true;
+      const data ={}
+        await this.partner.EditContract(data,this.contact_id).then(async (res) => {
+          if (res.status == true) {
+            this.$toast.add({
+                severity: "success",
+                summary: "แจ้งเตือน",
+                detail: "ส่งเรื่องไปให้เรียบร้อยแล้ว",
+                life: 3000,
+            });
+            await this.getcontact();
+            this.dialog_contact = false;
+          }
+        })
+        this.isLoading = false;
+    },
+    async canclecontact(){
+      this.isLoading =true;
+        const data ={}
+        await this.partner.CancleContract(data,this.contact_id).then(async (res) => {
+          if (res.status == true) {
+            this.$toast.add({
+                severity: "success",
+                summary: "แจ้งเตือน",
+                detail: "ยกเลิกสัญญาให้เรียบร้อยแล้ว",
+                life: 3000,
+            });
+            await this.getcontact();
+            this.dialog_contact = false;
+          }
+        })
+        this.isLoading = false;
+    },
+    async getcontact(){
+      console.log("test")
+      await this.partner.GetContract(this.$store.getters._id).then(async (res) => {
+        this.contact = res?.data?.filter(item=> item?.partner?.id == this.$store.getters._id);
+      })
+    },
 
+    async signatureadd (id){
+      const data = this.optionsign.find(item => item._id == this.signname)
+      console.log(data)
+      this.signdata.push(data);
+      this.signname = "";
+    },
+    async signaturedelete(id){
+      this.signdata= this.signdata.filter(item=> item._id != id)
+    },
+
+    async dialogcontact(item){
+      this.dialog_contact =true;
+      this.contact_id = item._id;
+    },
+    
     async loadUserData() {
       try {
+
         this.isLoading = true;
         const response = await axios.get(`${process.env.VUE_APP_API}/partner/me`, {
           headers: {
             "token": localStorage.getItem('token'),
           },
         });
-        this.status_appover = response.data.data.status_appover;
+        await this.partner.Getbypartnerid(this.$store.getters._id).then(async (res) => {
+          this.status_appover = res?.data.status_appover;
+          this.signature = res?.data?.signature
+          this.userData = res.data; 
+          this._id = this.userData?._id;
+          this.username = this.userData?.username;
+        
+          this.antecedent = this.userData?.antecedent;
+          this.partner_name = this.userData?.partner_name;
+          this.partner_phone = this.userData?.partner_phone;
+          this.partner_email = this.userData?.partner_email;
+          this.partner_iden_number = this.userData?.partner_iden_number; 
+          this.partner_address = this.userData?.partner_address; 
+    
+          this.partner_company_name = this.userData?.partner_company_name;
+          this.partner_company_number = this.userData?.partner_company_number;      
+          this.partner_company_address = this.userData?.partner_company_address;
+          this.partner_company_phone = this.userData?.partner_company_phone;
+          this.optionsign = this.userData?.signature;
 
-
-        this.userData = response.data.data; // กำหนดค่า userData
-
+          this.partner_iden_prview = this.userData.partner_iden;
+          this.filecompany_iden_prview = this.userData.filecompany;
+          this.logo_prview = this.userData.logo;
+        })
+        
+        await this.getcontact();
+        await this.getsignal();
         console.log("ข้อมูลพาร์ทเนอร์", response.data.data);
-
-
       } catch (error) {
         console.error(error);
       } finally {
         this.isLoading = false;
       }
     },
-
+    async getsignal (){
+        await this.partner.Getbypartnerid(this._id).then(async (res) => {
+            this.signature = res?.data?.signature
+        })
+    },
 
     async confirmLogout() {
       const confirmResult = await Swal.fire({
@@ -385,6 +795,184 @@ export default {
 
 
     },
+
+    getImage (item){
+  return `https://drive.google.com/thumbnail?id=${item}`;
+    },
+    chooseidcard (event){
+      this.partner_iden = event.files[0];
+    },
+    choosefilecompany (event){
+      this.filecompany = event.files[0]; 
+    },
+    
+    chooselogo(event){
+      this.logo = event.files[0];
+    },
+    choosesignal(event){
+      this.signature_sign = event.files[0];
+    },
+    async choosesilp(event){
+      this.silp = event.files[0];
+    },
+    async deletesignal (indexs){
+      this.isLoading =true
+      const data ={
+        signatureid:indexs
+      }
+      await this.partner.Deletesignature(data, this._id).then(async (res) => {
+        await this.getsignal();
+        console.log("อัพโหลด")
+      });
+      this.isLoading =false;
+    },
+    async addsignal (){
+      this.isLoading =true
+      if(this.signature_name =="" || this.signature_role == "" || this.signature_position == "" || this.signature_sign =="")
+      {
+        this.$toast.add({
+          severity: 'error',
+          summary: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
+          detail: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
+          life: 3000,
+        });
+        return ""
+      }
+  
+      const formData = new FormData();
+      formData.append("name",this.signature_name)
+      formData.append("role",this.signature_role)
+      formData.append("position",this.signature_position)
+      formData.append("image", this.signature_sign);
+      await this.partner.Addsignature(formData, this._id).then(async (res) => {
+        await this.getsignal();
+        console.log("อัพโหลด")
+      });
+
+      this.signature_name = "";
+      this.signature_role = "";
+      this.signature_position = "";
+      this.signature_sign = "";
+      this.isLoading =false;
+    },
+
+    
+    async editdata (){
+      if(this.username == ""  || this.antecedent =="" ||
+        this.partner_name =="" || this.partner_phone =="" || this.partner_email =="" ||
+         this.partner_iden_number == "" || this.partner_address == "" ||  this.partner_company_name == "" ||
+        this.partner_company_number =="" || this.partner_company_address =="" || this.partner_company_phone =="" ){
+          this.$toast.add({
+            severity: 'error',
+            summary: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
+            detail: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
+            life: 3000,
+            });
+            return ""
+
+        }
+        const data ={
+          username:this.username , 
+          password:this.password ,
+          antecedent:this.antecedent,
+          partner_name:this.partner_name,
+          partner_phone:this.partner_phone,
+          partner_email:this.partner_email,
+          partner_iden_number:this.partner_iden_number,
+          partner_address:this.partner_address,  
+          partner_company_name:this.partner_company_name,
+          partner_company_number:this.partner_company_number,
+          partner_company_address:this.partner_company_address, 
+          partner_company_phone:this.partner_company_phone,
+        }
+        this.isLoading = true;
+        await this.partner.EditPartner(data,this._id).then(async (res) => {
+          if (res.status == true) {
+            console.log("Test1")
+              if(this.partner_iden !=''){
+                await this.addidcard(this.partner_iden,res.data._id);
+              }
+              console.log("Test2")
+              if(this.filecompany !='')
+              {
+                await this.addfilecompany(this.filecompany,res.data._id);
+              }
+              console.log("Test3")
+              if(this.logo !='')
+              {
+                await this.addlogo(this.logo,res.data._id)
+              }
+              
+              
+              await this.loadUserData();
+
+              this.$toast.add({
+                severity: "success",
+                summary: "แจ้งเตือน",
+                detail: "แก้ไขข้อมูลสำเร็จ",
+                life: 3000,
+              });
+              this.visible = false
+              this.isLoading = false;
+          } else {
+        if (res?.response?.status == 409) {
+          $toast.add({
+          severity: "warn",
+          summary: "แจ้งเตือน",
+          detail: res.response.data.message,
+          life: 3000,
+        });
+        this.isLoading = false;
+    } else {
+        $toast.add({
+          severity: "warn",
+          summary: "แจ้งเตือน",
+          detail: res.message,
+          life: 3000,
+        });
+    }
+  }
+        })
+        
+
+      
+    },
+
+
+    
+    async addidcard  (item, id){
+      const formData = new FormData();
+        formData.append("image", item);
+        await this.partner.AddIdcard(formData, id).then(async (res) => {
+          console.log("ส่งสำเร็จรูปสำเร็จ")
+        });
+    },
+    async addfilecompany (item, id)  {
+        const formData = new FormData();
+        formData.append("image", item);
+         await this.partner.Addfilecompany(formData, id).then(async (res) => {
+            console.log("ส่งสำเร็จรูปสำเร็จ")
+        });
+    },
+    async addlogo  (item, id){
+        const formData = new FormData();
+        formData.append("image", item);
+        await this.partner.AddLogo(formData, id).then(async (res) => {
+          console.log("ส่งสำเร็จรูปสำเร็จ")
+        });
+    },
+    // goToContractDetails(contractId) {
+    //         this.$router.push({ name: 'ContractByID', params: { id: contractId } });
+    // },
+    lastStatus(status){
+
+      if (status.length > 0) {
+        return status[status.length - 1]?.name;
+      } else {
+        return "";
+      }
+    }
+
   },
 };
 </script>
