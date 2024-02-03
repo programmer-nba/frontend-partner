@@ -41,7 +41,7 @@ export default {
       console.log('Token:', localStorage.getItem("token"));
       console.log('Decoded Token:', decode);
 
-
+      if (decode) {
       await axios
         .get(`${process.env.VUE_APP_API}/partner/me/`, {
           headers: {
@@ -49,7 +49,7 @@ export default {
           },
         })
         .then(async (res) => {
-          // const decode = jwtDecode(localStorage.getItem("token"));
+          const decode = jwtDecode(localStorage.getItem("token"));
           const data_login = {
             logedIn: true,
             _id:res.data.data._id,
@@ -75,6 +75,11 @@ export default {
           localStorage.clear();
           this.$router.push("/login");
         });
+      } else {
+      // ถ้า token ไม่มีค่าหรือ decode ไม่ได้ ให้ทำการ clear localStorage และ redirect ไปยังหน้า login
+      localStorage.clear();
+      this.$router.push("/login");
+    }
     } else {
       localStorage.clear();
       this.$router.push("/login");
