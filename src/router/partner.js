@@ -32,6 +32,26 @@ const routes = [
     path:"/ContractByID/:id"  ,
     name:"ContractByID",
     component : ()=> import("../components/partner/contact.vue")
+  },
+  {
+    path:"/Contract/AddContract",
+    name:"AddContract",
+    component : ()=> import("../components/contact/AddContact.vue")
+  },
+  {
+    path:"/Contract/",
+    name:"Contract",
+    component : ()=> import("../components/contact/ContactView.vue")
+  },
+  {
+    path:"/Dealers",
+    name:"Dealers",
+    component : ()=> import("../components/dealers/dealerview.vue")
+  },
+  {
+    path:"/Dealersview",
+    name:"Dealersview",
+    component : ()=> import("../components/dealers/dealer.vue")
   }
 ];
 

@@ -9,14 +9,11 @@
       flex items-center justify-center">
 
   <div class="w-full h-100">
-
-
     <div class="text-center">
             <h2 class="mt-6 mb-12 text-3xl font-bold text-[#C2F784]">
               Log in
             </h2>
           </div>
-    
       <div>
         <label class="block text-[#F6FBF4]">Username</label>
         <input v-model="username" type="text"  placeholder="กรอกชื่อผู้ใช้" class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-[#A6FF96] focus:bg-white focus:outline-none" >

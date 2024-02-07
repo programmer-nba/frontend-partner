@@ -384,7 +384,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/all`,
+      url: `https://api.nbadigital.tech/contract/WriteProgram/all`,
       
     };
 
@@ -467,6 +467,99 @@ export class Partner {
         data = error;
       });
 
+    return data;
+  }
+  
+  //เรียกจังหวัดจังหวัด
+  async GetProvince() {
+    let data;
+    const config = {
+      method: "get",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${process.env.VUE_APP_THAILAND}thailand/province`,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  //เรียกอำเภอ
+  async GetAmphure(id) {
+    let data;
+    const config = {
+      method: "get",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${process.env.VUE_APP_THAILAND}thailand/amphure/by-province-id/${id}`,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  //เรียกตำบล
+  async GetTambon(id) {
+    let data;
+    const config = {
+      method: "get",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${process.env.VUE_APP_THAILAND}thailand/tambon/by-amphure-id/${id}`,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+
+  //ส่งข้อมูลให้ adimn อนุมัติ
+  async SendAdmin(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/WaitForApproval/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
     return data;
   }
  

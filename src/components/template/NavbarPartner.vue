@@ -87,18 +87,12 @@ export default {
       activeMenuItem: null,
       menuItems: [
       { id: 1, label: 'หน้าแรก', route: '/' },
-      {
-          id: 2, label: 'บันทึกข้อความ',  subItems: [
-            { id: 1, label: 'เพิ่มบันทึกข้อความ', route: '/Record/AddRecord'},
-            { id: 2, label: 'บันทึกข้อความทั้งหมด', route: '/Record'  }
-          ]
-        },
-   
-        { id: 6, label: 'สัญญา', route: '/Contract'  },
-
-        { id: 6, label: 'โปรไฟล์', route: '/Profile'  },
-
-
+      { id: 2, label: 'สัญญา', route: '/Contract/'  },
+      { id: 3, label: 'คู่ค้า', subItems: [
+        { id: 1, label: 'ลงทะเบียนคู่ค้า', route: '/Dealers' },
+        { id: 2, label: 'คู่ค้า', route: '/Dealersview'},
+      ] 
+      },
       ],
 
     };
@@ -171,12 +165,9 @@ export default {
     },
 
     logout() {
-    
-      // localStorage.clear();
-      // localStorage.clear();
-      this.$store.commit("setLoginDefault");
-
-    },
+    localStorage.clear();
+    this.$store.commit("setLoginDefault");
+  },
 
   },
 

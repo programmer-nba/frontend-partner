@@ -10,19 +10,7 @@
 
 
   <!-- <p>Status Partner: {{ status_appover }}</p> -->
-
-
-
-
-
-
-
-
-
   <div class=" bg-[#CFF6CF] min-h-screen">
-
-
-
     <main class="grid grid-cols-1 lg:grid-cols-2 gap-6 py-12  w-2xl container px-2 mx-auto">
 
       <aside class="">
@@ -56,14 +44,21 @@
                     status_appover === 'รออนุมัติ' ?
                       'กรุณารอแอดมินตรวจสอบข้อมูลของท่าน' :
                       status_appover === 'ยังกรอกข้อมูลไม่ครบ' ?
-                        'ท่านยังไม่ได้กรอกข้อมูลการลงนาม' :
+                        'กรุณากรอกข้อมูลผู้ลงนามให้ครบแล้วส่งให้แอดมินตรวจสอบ' :
                         ''
                   }}
                   </h4>
                 </div>
+                
               </div>
+           
 
 
+            </div>
+            <div class="flex justify-center">
+                <button @click="sendadmin" class="mt-6 block select-none rounded-lg bg-green-500 hover:bg-green-600 py-3 px-6 text-center text-white " v-if="status_appover === 'ยังกรอกข้อมูลไม่ครบ' ">
+                  ส่งข้อมูลให้แอดมินตรวจสอบ
+                </button> 
             </div>
           </section>
         </div>
@@ -242,11 +237,11 @@
                   </td>
                   <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                     <button  @click=" dialogcontact(item)" class="text-white bg-[#116530] hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
-                      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center " v-if="lastStatus(item.status) =='รอลงนาม'">เซ็นต์สัญญา</button>
+                      focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center " >ดูสัญญา</button>
                   </td>
                 </tr>
               </tbody>
-              <tbody v-if="contact.length == 0">
+              <tbody v-if="contact?.length == 0">
                   <tr >
                     <td colspan="4" class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-center">ไม่มีข้อมูล</td>
                   </tr>
@@ -262,7 +257,7 @@
 
 
   <Dialog v-model:visible="visible" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-    :style="{ width: '950px', 'z-index': 1000 }">
+    :style="{ width: '1000px', 'z-index': 1000 }">
     <div class="max-w-4xl mx-auto bg-white p-10">
 
   
@@ -270,74 +265,118 @@
     <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">username</label>
     <input  v-model="username"   type="text" placeholder="กรุณากรอก username"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">password</label>
     <input v-model="password"  type="password"  placeholder="กรุณากรอก password"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3   ">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">คำนำหน้า</label>
     <Dropdown v-model="antecedent" :options="optionantecedent" optionLabel="name" optionValue="name" placeholder="กรุณาเลือกคำนำหน้า"
-    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-1   " />
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full " />
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อ - สกุล</label>
     <input type="text" v-model="partner_name"  placeholder="กรุณากรอกชื่อ - สกุล" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ที่อยู่</label>
     <input v-model="partner_address" type="text"  placeholder="กรุณากรอกที่อยู่" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+  </div>
+  <div>
+  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">จังหวัด</label>
+    <Dropdown v-model="partner_province" :options="optionprovince" optionLabel="name_th" optionValue="name_th"
+    placeholder="กรุณาเลือกจังหวัด" filter @change="chooseprovice()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อำเภอ</label>
+    <Dropdown v-model="partner_amphure" :options="optionamphure" optionLabel="name_th" optionValue="name_th"
+     placeholder="กรุณาเลือกอำเภอ" filter @change="chooseamphure()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำบล</label>
+    <Dropdown v-model="partner_district" :options="optiondistrict" optionLabel="name_th" optionValue="name_th"
+      placeholder="กรุณาเลือกตำบล" filter @change="choosedistrict()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">รหัสไปรษณีย์</label>
+    <input type="text"  v-model="partner_postcode" placeholder="กรุณากรอกรหัสไปรษณีย์"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" readonly="true">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เบอร์โทรศัพท์</label>
     <input type="number" v-model="partner_phone" placeholder="กรุณากรอกเบอร์โทรศัพท์"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">บัตรประชาชน</label>
     <input type="number" v-model="partner_iden_number"  placeholder="กรุณากรอกบัตรประชาชน"
       
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อีเมล์</label>
     <input type="text" v-model="partner_email"  placeholder="กรุณากรอกอีเมล์" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
       </div>
 
-      <div class="grid gap-6 mb-6 lg:grid-cols-2">
-     
-    
-    
+      <div class="grid gap-6 mb-6 lg:grid-cols-2"> 
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อบริษัท</label>
     <input type="text" v-model="partner_company_name"  placeholder="กรุณากรอกชื่อบริษัท" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เลขประจำตัวผู้เสียภาษี</label>
     <input type="text" v-model="partner_company_number"  placeholder="กรุณากรอกเลขประจำตัวผู้เสียภาษี" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ที่อยู่บริษัท</label>
     <input type="text" v-model="partner_company_address"  placeholder="กรุณากรอกที่อยู่บริษัท" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+  </div>
+  <div>
+  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">จังหวัดบริษัท</label>
+    <Dropdown v-model="partner_company_province" :options="optionprovince" optionLabel="name_th" optionValue="name_th"
+    placeholder="กรุณาเลือกจังหวัด" filter @change="choosecompanyprovice()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อำเภอบริษัท</label>
+    <Dropdown v-model="partner_company_amphure" :options="optionamphurecompany" optionLabel="name_th" optionValue="name_th"
+     placeholder="กรุณาเลือกอำเภอ" filter @change="choosecompanyamphure()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำบลบริษัท</label>
+    <Dropdown v-model="partner_company_district" :options="optiondistrictcompany" optionLabel="name_th" optionValue="name_th"
+      placeholder="กรุณาเลือกตำบล" filter @change="choosecompanydistrict()"
+    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
+  </div>
+  <div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">รหัสไปรษณีย์บริษัท</label>
+    <input type="text"  v-model="partner_company_postcode" placeholder="กรุณากรอกเบอร์โทรศัพท์"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" readonly="true">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">เบอร์โทรศัพท์บริษัท</label>
     <input type="text" v-model="partner_company_phone"  placeholder="กรุณากรอกเบอร์โทรศัพท์บริษัท" 
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบบัตรประชาชน</label>
-    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(partner_iden_prview)" v-if="partner_iden_prview !=''">
+    <img class=" bg-white p-2 shadow mb-4" :src="getImage(partner_iden_prview)" v-if="partner_iden_prview !='' && partner_iden_chooes ==''">
+    <img class=" bg-white p-2 shadow mb-4" :src="partner_iden_chooes" v-if="partner_iden_chooes !=''">
     <FileUpload
           mode="basic"
           name="demo[]" url="/api/upload"
@@ -349,11 +388,12 @@
           :fileLimit="1"
           v-if="partner_iden ==''"
         />
-        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+    
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
-    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview)" v-if="filecompany_iden_prview !=''">
+    <img class="bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview)" v-if="filecompany_iden_prview !='' && filecompany_chooes  ==''" @click="clickdownload(filecompany_iden_prview)" >  
+    <img class=" bg-white p-2 shadow mb-4" :src="filecompany_chooes" v-if="filecompany_chooes !='' ">
     <FileUpload
           mode="basic"
           name="demo[]" url="/api/upload"
@@ -365,11 +405,13 @@
           :fileLimit="1"
           v-if="filecompany ==''"
         />
-        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+        <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
+        
   </div>
   <div>
     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบ logo</label>
-    <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(logo_prview)" v-if="logo_prview !=''">
+    <img class=" bg-white p-2 shadow mb-4" :src="getImage(logo_prview)" v-if="logo_prview !='' && logo_chooes ==''">
+    <img class=" bg-white p-2 shadow mb-4" :src="logo_chooes" v-if="logo_chooes !='' ">
     <FileUpload
           mode="basic"
           name="demo[]" url="/api/upload"
@@ -381,7 +423,7 @@
           :fileLimit="1"
           v-if="logo ==''"
         />
-        <div v-else class="text-2xl text-blue-700">  คุณได้เลือกภาพใบประชาชนแล้ว</div>
+        
   </div>
     </div>
 
@@ -389,17 +431,17 @@
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อ - สกุลที่ลงนามสัญญา</label>
           <input v-model="signature_name"  type="text" placeholder="กรุณากรอกชื่อ - สกุล"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
         </div>
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แผนกที่ลงนามสัญญา</label>
           <input v-model="signature_role"  type="text" placeholder="กรุณากรอกแผนก"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
         </div>
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำแหน่งที่ลงนามสัญญา</label>
           <input v-model="signature_position"  type="text" placeholder="กรุณากรอกตำแหน่ง"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   ">
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
         </div>
         <div>
 
@@ -443,7 +485,7 @@
         </thead>
         <tr v-for="(item, index) in signature" :key="index">
           <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-            <img class="h-32 w-32 bg-white p-2 shadow mb-4" :src="getImage(item.sign)" v-if="userData?.logo !=''">
+            <img class="bg-white p-2 shadow mb-4" :src="getImage(item.sign)" v-if="userData?.logo !=''">
           
           </td>
         <td class="border-t-0 px-4 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">{{ item.name }}</td>
@@ -480,8 +522,8 @@
         <contact :data="contact_id" v-if="contact_id !=''"/>
       </div>
       
-      
-      <div class="grid gap-6 mb-6 text-center ">
+      <div v-if="lastStatus(contact?.status) =='รอลงนามสัญญา'">
+        <div class="grid gap-6 mb-6 text-center ">
         <div>
         
     <FileUpload
@@ -553,6 +595,8 @@
       class="text-white bg-red-600 hover:bg-[#0B4619] focus:ring-4 focus:outline-none 
       focus:ring-[#146356] font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center ">ยกเลิกลงนามสัญญา</button>
     </div>
+      </div>
+    
   
 </div>
   </Dialog>
@@ -598,6 +642,15 @@ export default {
       { name: "นาง" },
       { name: "นางสาว" }
       ],
+      optionprovince:[],
+      optionamphure:[],
+      optiondistrict:[],
+
+      //ของบริษัท
+      optionamphurecompany:[],
+      optiondistrictcompany:[],
+
+    
       /// v-model
       _id:"",
       username:"",
@@ -608,18 +661,29 @@ export default {
       partner_email:"",
       partner_iden_number: "", 
       partner_address: "", 
+      partner_province: "",
+      partner_amphure: "",
+      partner_district: "",
+      partner_postcode: "",
       //บริษัท
       partner_company_name: "",
       partner_company_number:"",  // เลขประจำผู้เสียภาษี
       partner_company_address:"", // ที่อยู่บริษัท
       partner_company_phone:"", // เบอร์โทรบริษัท
+      partner_company_province: "",
+      partner_company_amphure: "",
+      partner_company_district: "",
+      partner_company_postcode: "",
       
       partner_iden: "", // เลขบัตรประชาชน
       partner_iden_prview:"",
+      partner_iden_chooes:"",
       filecompany:"",
       filecompany_iden_prview :"",
+      filecompany_chooes:"",
       logo:"",
       logo_prview:"",
+      logo_chooes:"",
 
 
       signature_name:"",
@@ -703,7 +767,6 @@ export default {
         this.isLoading = false;
     },
     async getcontact(){
-      console.log("test")
       await this.partner.GetContract(this.$store.getters._id).then(async (res) => {
         this.contact = res?.data?.filter(item=> item?.partner?.id == this.$store.getters._id);
       })
@@ -734,6 +797,9 @@ export default {
           },
         });
         await this.partner.Getbypartnerid(this.$store.getters._id).then(async (res) => {
+          await this.partner.GetProvince().then(async (res) => {
+              this.optionprovince = res;
+          })
           this.status_appover = res?.data.status_appover;
           this.signature = res?.data?.signature
           this.userData = res.data; 
@@ -746,16 +812,32 @@ export default {
           this.partner_email = this.userData?.partner_email;
           this.partner_iden_number = this.userData?.partner_iden_number; 
           this.partner_address = this.userData?.partner_address; 
+          this.partner_province = this.userData?.partner_province;
+          await this.chooseprovice();
+          this.partner_amphure = this.userData?.partner_amphure;
+          await this.chooseamphure();
+          this.partner_district = this.userData?.partner_district;
+          await this.choosedistrict();
+          this.partner_postcode = this.userData?.partner_postcode;
     
           this.partner_company_name = this.userData?.partner_company_name;
           this.partner_company_number = this.userData?.partner_company_number;      
           this.partner_company_address = this.userData?.partner_company_address;
           this.partner_company_phone = this.userData?.partner_company_phone;
+          this.partner_company_province = this.userData?.partner_company_province;
+          await this.choosecompanyprovice();
+          this.partner_company_amphure = this.userData?.partner_company_amphure;
+          await this.choosecompanyamphure();
+          this.partner_company_district = this.userData?.partner_company_district;
+          await this.choosecompanydistrict();
+          this.partner_company_postcode = this.userData?.partner_company_postcode;
           this.optionsign = this.userData?.signature;
 
           this.partner_iden_prview = this.userData.partner_iden;
           this.filecompany_iden_prview = this.userData.filecompany;
           this.logo_prview = this.userData.logo;
+
+          
         })
         
         await this.getcontact();
@@ -792,23 +874,31 @@ export default {
       localStorage.clear();
       this.$store.commit("setLoginDefault");
       this.$router.push("/");
-
-
     },
-
     getImage (item){
-  return `https://drive.google.com/thumbnail?id=${item}`;
+        return `https://drive.google.com/thumbnail?id=${item}`;
+    },
+    clickdownload(item){
+      const fileID = item; // ปรับตามต้องการ
+    
+      const directLink = `https://drive.google.com/file/d/${fileID}/view`;
+      const newTab = window.open(directLink, '_blank');
     },
     chooseidcard (event){
       this.partner_iden = event.files[0];
+      this.partner_iden_chooes = event.files[0].objectURL;
     },
     choosefilecompany (event){
       this.filecompany = event.files[0]; 
+      this.filecompany_chooes = event.files[0].objectURL;
     },
     
     chooselogo(event){
       this.logo = event.files[0];
+      this.logo_chooes = event.files[0].objectURL;
     },
+
+    
     choosesignal(event){
       this.signature_sign = event.files[0];
     },
@@ -860,8 +950,7 @@ export default {
     async editdata (){
       if(this.username == ""  || this.antecedent =="" ||
         this.partner_name =="" || this.partner_phone =="" || this.partner_email =="" ||
-         this.partner_iden_number == "" || this.partner_address == "" ||  this.partner_company_name == "" ||
-        this.partner_company_number =="" || this.partner_company_address =="" || this.partner_company_phone =="" ){
+         this.partner_iden_number == "" ){
           this.$toast.add({
             severity: 'error',
             summary: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
@@ -880,30 +969,44 @@ export default {
           partner_email:this.partner_email,
           partner_iden_number:this.partner_iden_number,
           partner_address:this.partner_address,  
+          partner_province:this.partner_province,
+          partner_amphure:this.partner_amphure,
+          partner_district:this.partner_district,
+          partner_postcode:this.partner_postcode,
           partner_company_name:this.partner_company_name,
           partner_company_number:this.partner_company_number,
           partner_company_address:this.partner_company_address, 
+          partner_company_province:this.partner_company_province,
+          partner_company_amphure:this.partner_company_amphure,
+          partner_company_district:this.partner_company_district,
+          partner_company_postcode:this.partner_company_postcode,
           partner_company_phone:this.partner_company_phone,
         }
         this.isLoading = true;
         await this.partner.EditPartner(data,this._id).then(async (res) => {
           if (res.status == true) {
-            console.log("Test1")
+           
               if(this.partner_iden !=''){
                 await this.addidcard(this.partner_iden,res.data._id);
               }
-              console.log("Test2")
+            
               if(this.filecompany !='')
               {
                 await this.addfilecompany(this.filecompany,res.data._id);
               }
-              console.log("Test3")
+            
               if(this.logo !='')
               {
                 await this.addlogo(this.logo,res.data._id)
               }
               
-              
+              // clear ข้อมูล
+              this.partner_iden = "";
+              this.partner_iden_chooes = "";
+              this.filecompany = "";
+              this.filecompany_chooes = "";
+              this.logo = "";
+              this.logo_chooes = "";
               await this.loadUserData();
 
               this.$toast.add({
@@ -937,9 +1040,6 @@ export default {
 
       
     },
-
-
-    
     async addidcard  (item, id){
       const formData = new FormData();
         formData.append("image", item);
@@ -961,18 +1061,80 @@ export default {
           console.log("ส่งสำเร็จรูปสำเร็จ")
         });
     },
-    // goToContractDetails(contractId) {
-    //         this.$router.push({ name: 'ContractByID', params: { id: contractId } });
-    // },
     lastStatus(status){
 
-      if (status.length > 0) {
-        return status[status.length - 1]?.name;
+      if (status?.length > 0) {
+        return status[status?.length - 1]?.name;
       } else {
         return "";
       }
-    }
+    },
+    async chooseprovice(){
+      const provice =this.optionprovince.find((item)=>{
+        return item.name_th == this.partner_province
+      })
+      await this.partner.GetAmphure(provice.id).then(async (res) => {
+          this.optionamphure = res;
+      });
 
+    },
+
+  async chooseamphure(){
+    const amphure =this.optionamphure.find((item)=>{
+      return item.name_th == this.partner_amphure
+    })
+    this.partner.GetTambon(amphure.id).then(async (res) => {
+        this.optiondistrict = res;
+    });
+  },
+
+  async choosedistrict(){
+    const district =this.optiondistrict.find((item)=>{
+    return item.name_th == this.partner_district
+  })
+
+  this.partner_postcode = district?.zip_code;
+  },
+  async choosecompanyprovice(){
+    const provice =this.optionprovince.find((item)=>{
+      return item.name_th == this.partner_company_province
+    })
+    await this.partner.GetAmphure(provice.id).then(async (res) => {
+        this.optionamphurecompany = res;
+    });
+
+  },
+  async choosecompanyamphure(){
+    const amphure =this.optionamphurecompany.find((item)=>{
+      return item.name_th == this.partner_company_amphure
+    })
+    await this.partner.GetTambon(amphure.id).then(async (res) => {
+        this.optiondistrictcompany = res;
+    });
+  },
+  async choosecompanydistrict(){
+    const district =this.optiondistrictcompany.find((item)=>{
+    return item.name_th == this.partner_company_district
+  })
+  this.partner_company_postcode = district.zip_code;
+  },
+
+  async sendadmin(){
+    this.isLoading = true;
+    const data ={}
+    await this.partner.SendAdmin(data,this._id).then(async (res) => {
+      if (res.status == true) {
+        this.$toast.add({
+            severity: "success",
+            summary: "แจ้งเตือน",
+            detail: "ส่งข้อมูลให้adminตรวจสอบแล้ว กรุณารอการตรวจสอบ",
+            life: 3000,
+        });
+        await this.loadUserData();
+      }
+      this.isLoading = false;
+    })
+  },
   },
 };
 </script>

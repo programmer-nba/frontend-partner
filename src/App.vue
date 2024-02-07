@@ -137,8 +137,8 @@ export default {
   font-style: normal;
 }
 
-.p-datatable .p-datatable-thead > tr > th {
+/* .p-datatable .p-datatable-thead > tr > th {
   background-color: #295bac !important;
   color: #effcef;
-}
+} */
 </style>
