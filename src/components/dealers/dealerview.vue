@@ -221,7 +221,42 @@
 
     onMounted(async () => {
         await getProvince();
+        await getdata();
     });
+    const getdata = async () => {
+        //เรียกapi ข้อมูล partner มา
+        isLoading.value = true;
+        await partner.Getbypartnerid($stores.getters._id).then(async (res) => {
+            if (res.status === true) {
+                dealer.value.name = res.data.partner_name;
+                dealer.value.lden = res.data.partner_iden_number;
+                dealer.value.phone = res.data.partner_phone;
+                dealer.value.address = res.data.partner_address;
+                dealer.value.province = res.data.partner_province;
+                await chooseprovice();
+                dealer.value.amphure = res.data.partner_amphure;
+                await chooseamphure();
+                dealer.value.district = res.data.partner_district;
+                await choosedistrict();
+                dealer.value.postcode = res.data.partner_postcode;
+                dealer.value.company_name = res.data.partner_company_name;
+                dealer.value.company_tax = res.data.partner_company_number;
+                dealer.value.company_address = res.data.partner_company_address;
+                dealer.value.company_province = res.data.partner_company_province;
+                await chooseprovicecompany();
+                dealer.value.company_amphure = res.data.partner_company_amphure;
+                await chooseamphurecompany();
+                dealer.value.company_district = res.data.partner_company_district;
+                await choosedistrictcompany();
+                dealer.value.company_postcode = res.data.partner_company_postcode;
+                dealer.value.company_phone = res.data.partner_company_phone;
+
+            }
+        }).finally(() => {
+            isLoading.value = false;
+        })
+        
+    };
     const getProvince = async () => {
         const res = await partner.GetProvince();
         optionprovince.value = res;
@@ -306,7 +341,7 @@
         });
     };
 
-    const chooseamphure = () => {
+    const chooseamphure = async() => {
         const amphure = optionamphure.value.find((item) => {
             return item.name_th == dealer.value.amphure;
         });
@@ -315,7 +350,7 @@
         });
     };
 
-    const choosedistrict = () => {
+    const choosedistrict = async() => {
         const district = optiondistrict.value.find((item) => {
             return item.name_th == dealer.value.district;
         });
@@ -332,7 +367,7 @@
         });
     };
     //เมื่อเลือกอำเภอ แล้วไปเรียกตำบล
-    const chooseamphurecompany = () => {
+    const chooseamphurecompany =  async() => {
         const amphure = optionamphurecompany.value.find((item) => {
             return item.name_th == dealer.value.company_amphure;
         });
@@ -341,7 +376,7 @@
         });
     };
     //เมื่อเลือกตำบล แล้วไปเรียกรหัสไปรษณีย์
-    const choosedistrictcompany = () => {
+    const choosedistrictcompany = async() => {
         const district = optiondistrictcompany.value.find((item) => {
             return item.name_th == dealer.value.company_district;
         });

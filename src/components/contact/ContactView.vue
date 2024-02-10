@@ -57,14 +57,15 @@
     <Dialog v-model:visible="dialog_contact" :breakpoints="{ '960px': '75vw', '640px': '90vw' }" header="ดูรายละเอียดสัญญา" :style="{ width: '950px', 'z-index': 1000 }">
     <div class="max-w-4xl mx-auto bg-white ">
       <div class="grid gap-6 mb-6 ">
-        <contactviews :data="contact_id" v-if="contact_id !=''"/>
+        <contactviews :base="contact"  v-if="contact_id !=''"/>
       </div>
-      <!-- v-if="lastStatus(contact?.status) =='รอลงนามสัญญา'" -->
-      <div v-if="lastStatus(contact?.status) =='รอลงนามสัญญา'">
+      <!-- v-if="lastStatus(contact?.status) =='รอลงนาม'" -->
+      <div v-if="lastStatus(contact?.status) =='รอลงนาม'">
         <div class="grid gap-6 mb-6 text-center " >
         <div>
         
-    <FileUpload
+          <img v-if="silp_prview !=''" :src="silp_prview" class="w-1/2 mx-auto" />
+          <FileUpload
           mode="basic"
           name="demo[]" url="/api/upload"
           chooseLabel="แนบสลิปโอนเงิน"
@@ -172,6 +173,8 @@ const $confirm = useConfirm();
 const isLoading = ref(false);
 const dialog = ref(false);
 
+
+
 const list =ref([]);
 const choose = ref(0);
 const opendialog = (val) => {
@@ -230,9 +233,21 @@ const showpdpa = () => {
     pdpa.value = true;
 };
 
+
+const silp = ref('');
+const silp_prview = ref('');
+const choosesilp = (e) => {
+    silp.value = e.files[0];
+    silp_prview.value = URL.createObjectURL(e.files[0]);
+};
+const getImage = (item)=>{
+        return `https://drive.google.com/thumbnail?id=${item}`;
+}
 const accpetcontact = async()=>{
     isLoading.value =true;
-    const data ={}
+    const data ={
+      name:"การลงนามสัญญาสำเร็จ"
+    }
     await partner.AccpetContract(data,contact_id.value).then(async (res) => {
           if (res.status == true) {
             $toast.add({
@@ -244,13 +259,15 @@ const accpetcontact = async()=>{
           }
             
             await getItem();
+
+            pdpa.value = false;
             dialog_contact.value = false;
         })
         isLoading.value = false;
 }
 const editcontact = async()=>{
       isLoading.value = true;
-      const data ={}
+      const data ={name:"แก้ไขสัญญา"}
         await partner.EditContract(data,contact_id.value).then(async (res) => {
           if (res.status == true) {
             $toast.add({
@@ -267,7 +284,7 @@ const editcontact = async()=>{
 }
 const canclecontact = async()=>{
       isLoading.value =true;
-        const data ={}
+        const data ={ name:"ยกเลิกการลงนามสัญญา"}
         await partner.CancleContract(data,contact_id.value).then(async (res) => {
           if (res.status == true) {
             $toast.add({
@@ -282,6 +299,8 @@ const canclecontact = async()=>{
         })
         isLoading.value = false;
 }
+const pdpa = ref(false);
+
 
 document.title = " ข้อมูลสัญญา partner";
 </script>

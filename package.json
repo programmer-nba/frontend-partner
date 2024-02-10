@@ -1,9 +1,9 @@
 {
-  "name": "SmartPro",
+  "name": "Partner",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 4893",
+    "serve": "vue-cli-service serve --port 4751",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy:test": "scp -r dist/* root@143.198.204.72:/var/www/smartpro.nbadigital.tech"

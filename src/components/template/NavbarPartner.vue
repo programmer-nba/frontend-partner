@@ -73,11 +73,15 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+import { Partner } from '@/service/partner';
 
 export default {
   components: {
 
+  },
+  setup() {
+        const partner = new Partner();
+        return { partner }
   },
   data() {
     return {
@@ -85,20 +89,14 @@ export default {
       isMobile: false,
       isSubMenuOpen: false,
       activeMenuItem: null,
-      menuItems: [
-      { id: 1, label: 'หน้าแรก', route: '/' },
-      { id: 2, label: 'สัญญา', route: '/Contract/'  },
-      { id: 3, label: 'คู่ค้า', subItems: [
-        { id: 1, label: 'ลงทะเบียนคู่ค้า', route: '/Dealers' },
-        { id: 2, label: 'คู่ค้า', route: '/Dealersview'},
-      ] 
-      },
-      ],
+      menuItems: [],
+      status_appover: "",
 
     };
   },
 
-  mounted() {
+  async mounted() {
+    await this.loadUserData();
     this.isMobile = window.innerWidth < 913;
     window.addEventListener('resize', this.handleResize);
     document.addEventListener('click', this.closeDropdownOnClickOutside);
@@ -111,6 +109,28 @@ export default {
   },
   methods: {
  
+    async loadUserData() {
+      await this.partner.Getbypartnerid(this.$store.getters._id).then(async (res) => {
+        this.status_appover = res?.data?.status_appover;
+      })
+      if(this.status_appover =="อนุมัติแล้ว")
+      {
+        this.menuItems =[
+          { id: 1, label: 'หน้าแรก', route: '/' },
+          { id: 2, label: 'สัญญา', route: '/Contract/'  },
+          { id: 3, label: 'คู่ค้า', subItems: [
+              { id: 1, label: 'ลงทะเบียนคู่ค้า', route: '/Dealers' },
+              { id: 2, label: 'คู่ค้า', route: '/Dealersview'},
+            ]
+          }
+        ,]
+      }else{
+        this.menuItems =[
+          { id: 1, label: 'หน้าแรก', route: '/' },]
+      }
+      
+    },  
+
     toggleSubMenu(menuItem) {
       if (menuItem.route) {
         this.navigateAndCloseMenu(menuItem.route);

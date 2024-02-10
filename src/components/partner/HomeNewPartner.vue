@@ -516,16 +516,15 @@
 </div>
   </Dialog>
   <Dialog v-model:visible="dialog_contact" :breakpoints="{ '960px': '75vw', '640px': '90vw' }"
-    :style="{ width: '950px', 'z-index': 1000 }">
+    :style="{ width: '950px', 'z-index': 1500 }" header="รายละเอียดสัญญา">
     <div class="max-w-4xl mx-auto bg-white ">
       <div class="grid gap-6 mb-6 ">
-        <contact :data="contact_id" v-if="contact_id !=''"/>
+        <contact :base="choose_contact" v-if="contact_id !=''"/>
       </div>
-      
-      <div v-if="lastStatus(contact?.status) =='รอลงนามสัญญา'">
+      <div v-if="lastStatus(contact_status) =='รอลงนาม'">
         <div class="grid gap-6 mb-6 text-center ">
         <div>
-        
+          <img v-if="silp_prview !=''" :src="silp_prview" class="w-1/2 mx-auto" />
     <FileUpload
           mode="basic"
           name="demo[]" url="/api/upload"
@@ -699,7 +698,10 @@ export default {
       signname:"",
       signdata:[],
       silp:"",
+      silp_prview:"",
       contact_id :"",
+      choose_contact:"",
+      contact_status:"",
       pdpa:false,
     };
   },
@@ -716,7 +718,9 @@ export default {
 
     async accpetcontact (){
         this.isLoading =true;
-        const data ={}
+        const data ={
+          name:"การลงนามสัญญาสำเร็จ"
+        }
         await this.partner.AccpetContract(data,this.contact_id).then(async (res) => {
           if (res.status == true) {
             this.$toast.add({
@@ -734,7 +738,9 @@ export default {
     },
     async editcontact(){
       this.isLoading =true;
-      const data ={}
+      const data ={
+        name:"แก้ไขสัญญา"
+      }
         await this.partner.EditContract(data,this.contact_id).then(async (res) => {
           if (res.status == true) {
             this.$toast.add({
@@ -751,7 +757,9 @@ export default {
     },
     async canclecontact(){
       this.isLoading =true;
-        const data ={}
+        const data ={
+          name:"ยกเลิกการลงนามสัญญา"
+        }
         await this.partner.CancleContract(data,this.contact_id).then(async (res) => {
           if (res.status == true) {
             this.$toast.add({
@@ -785,6 +793,8 @@ export default {
     async dialogcontact(item){
       this.dialog_contact =true;
       this.contact_id = item._id;
+      this.choose_contact = item;
+      this.contact_status= item.status;
     },
     
     async loadUserData() {

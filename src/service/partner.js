@@ -384,10 +384,10 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/WriteProgram/all`,
+      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/GetAllContractNew`,
       
     };
-
+ 
     await axios(config)
       .then((result) => {
         if (result) {
@@ -407,7 +407,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/cancle/${id}`,
+      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 
@@ -430,7 +430,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/validate/${id}`,
+      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 
@@ -453,7 +453,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/editing/${id}`,
+      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 
