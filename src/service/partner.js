@@ -3,7 +3,8 @@ import axios from "axios";
 export class Partner {
   #token = localStorage.getItem("token");
   #baseUrl = process.env.VUE_APP_API;
-  #baseUrl2 = process.env.VUE_APP_API2;
+  #baseUrl2 = process.env.VUE_APP_OFFICE;
+  #baseUrl3 = process.env.VUE_APP_CONTACT;
   constructor() {}
 
   // รอลบทิ้ง
@@ -384,7 +385,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/GetAllContractNew`,
+      url: `${this.#baseUrl3}/HaveplaceNocapital/GetAllContractNew`,
       
     };
  
@@ -407,7 +408,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
+      url: `${this.#baseUrl3}/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 
@@ -430,7 +431,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
+      url: `${this.#baseUrl3}/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 
@@ -453,7 +454,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `https://api.nbadigital.tech/contract/HaveplaceNocapital/AddStatus/${id}`,
+      url: `${this.#baseUrl3}/HaveplaceNocapital/AddStatus/${id}`,
       data: packageData,
     };
 

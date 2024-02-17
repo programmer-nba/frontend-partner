@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --port 4751",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy:test": "scp -r dist/* root@143.198.204.72:/var/www/smartpro.nbadigital.tech"
+    "deploy:test": ""
   },
   "dependencies": {
     "axios": "^1.6.0",
