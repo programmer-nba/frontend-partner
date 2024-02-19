@@ -386,6 +386,7 @@
           @uploader="chooseidcard"
           :customUpload="true"
           :fileLimit="1"
+          style="font-size:9px; !important;"
           v-if="partner_iden ==''"
         />
     
@@ -403,6 +404,7 @@
           @uploader="choosefilecompany"
           :customUpload="true"
           :fileLimit="1"
+          style="font-size:9px; !important;"
           v-if="filecompany ==''"
         />
         <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
@@ -421,6 +423,7 @@
           @uploader="chooselogo"
           :customUpload="true"
           :fileLimit="1"
+          style="font-size:9px; !important;"
           v-if="logo ==''"
         />
         
@@ -453,11 +456,12 @@
                 name="demo[]" url="/api/upload"
                 chooseLabel="เลือกไฟล์ภาพลายเซ็นต์"
                 :auto="true"
-                class="mt-4 font bg-green-700 border-none hover:bg-green-600"
+                class="mt-4 font bg-green-700 border-none   hover:bg-green-600  "
                 @uploader="choosesignal"
                 :customUpload="true"
                 :fileLimit="1"
                 v-if="signature_sign ==''"
+                style="font-size:9px; !important;"
                 />
                 <div v-else class="text-2xl text-blue-700"> คุณได้เลือกภาพลายเซ็นต์</div>
 
