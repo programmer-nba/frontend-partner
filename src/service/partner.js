@@ -479,7 +479,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `${process.env.VUE_APP_THAILAND}thailand/province`,
+      url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json`,
     };
 
     await axios(config)
@@ -502,7 +502,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `${process.env.VUE_APP_THAILAND}thailand/amphure/by-province-id/${id}`,
+      url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_amphure.json`,
     };
 
     await axios(config)
@@ -525,7 +525,7 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `${process.env.VUE_APP_THAILAND}thailand/tambon/by-amphure-id/${id}`,
+      url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_tambon.json`,
     };
 
     await axios(config)

@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve --port 4751",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy:test": ""
+    "deploy:test": "scp -r dist/* root@159.89.193.27:/var/www/partner.tossaguns.com",
+    "deploy:production": "scp -r dist/* root@159.89.193.27:/var/www/partner.nbadigitalservice.com"
   },
   "dependencies": {
     "axios": "^1.6.0",

@@ -253,7 +253,7 @@ const chooseprovice = ()=>{
 
 
   partner.GetAmphure(provice.id).then(async (res) => {
-    optionamphure.value = res;
+    optionamphure.value = res.filter((el) => el.province_id === provice.id);
   });
 
 }
@@ -264,7 +264,7 @@ const chooseamphure = ()=>{
     return item.name_th == partners.value.partner_amphure
   })
   partner.GetTambon(amphure.id).then(async (res) => {
-    optiondistrict.value = res;
+    optiondistrict.value = res.filter((el) => el.amphure_id === amphure.id);
   });
 }
 
