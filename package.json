@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 4751",
+    "serve": "vue-cli-service serve --port 3000",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy:test": "scp -r dist/* root@159.89.193.27:/var/www/partner.tossaguns.com",
-    "deploy:production": "scp -r dist/* root@159.89.193.27:/var/www/partner.nbadigitalservice.com"
+    "deploy:production": "scp -r dist/* nbadigital@147.50.183.54:/var/www/partner.nbadigitalservice.com"
   },
   "dependencies": {
     "axios": "^1.6.0",
