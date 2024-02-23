@@ -294,7 +294,7 @@ o กระบวนการบริหารจัดการเหตุก
 สัญญานี้ทำขึ้นสองฉบับมีข้อความถูกต้องตรงกัน คู่สัญญาแต่ละฝ่ายได้อ่านโดยตลอดแล้ว เห็นว่าถูกต้องตามความประสงค์ จึงลงลายมือชื่อและประทับตราสำคัญของบริษัท(ถ้ามี) ไว้เป็นสำคัญต่อหน้าพยาน
 
 <!-- // ทำ checkbox ให้เป็นตัวเลือก -->
-<b class="text-center"><input type="checkbox" v-model="statuspdpa" > ข้าพเจ้าได้อ่านและยอมรับนโยบายคุ้มครองข้อมูลส่วนบุคคล</b>
+<b class="text-center"><input type="checkbox" v-model="statuspdpa" > ข้าพเจ้าได้อ่านและยอมรับนโยบายคุ้มครองข้อมูลส่วนบุคคลและยืนยันว่าการเซ็นสัญญาฉบับนี้สมบูรณ์และถูกต้องตามกฏหมาย</b>
 
       </div>
     <div class="flex justify-center mt-5">
@@ -393,6 +393,15 @@ const adddata = async () => {
             summary: "แจ้งเตือน",
             detail: "สมัครสมาชิกสำเร็จ",
             life: 3000,
+          });
+          const data2 ={
+            code:"PDPA",
+            partner_id:res.data._id,
+            partner_code:res.data.username,
+          }
+          await partner.Sendpdpa(data2).then(async (res) => {
+              console.log("ส่ง pdpa สำเร็จ");
+              
           });
           dialog.value = false;
         } else {

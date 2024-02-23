@@ -589,4 +589,26 @@ export class Partner {
     return data;
   }
  
+  //ส่งข้อมูลpdpa
+  async Sendpdpa(packageData) {
+    let data;
+    const config = {
+      method: "post",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl3}/partner-contract/create/`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+    return data;
+  }
 }
