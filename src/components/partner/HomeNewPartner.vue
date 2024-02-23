@@ -282,7 +282,9 @@
     :style="{ width: '1000px', 'z-index': 1000 }">
     <div class="max-w-4xl mx-auto bg-white p-10">
 
-
+      <div class="flex  w-full py-5">
+        <h1 class="text-xl font-bold">ข้อมูลบุคคล</h1>
+      </div>
       <div class="grid gap-6 mb-6 lg:grid-cols-2">
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">username</label>
@@ -350,7 +352,9 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
         </div>
       </div>
-
+      <div class="flex  w-full py-5">
+        <h1 class="text-xl font-bold">ข้อมูลบริษัท</h1>
+      </div>
       <div class="grid gap-6 mb-6 lg:grid-cols-2">
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ชื่อบริษัท</label>
@@ -369,19 +373,19 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
         </div>
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">จังหวัดบริษัท</label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">จังหวัด</label>
           <Dropdown v-model="partner_company_province" :options="optionprovince" optionLabel="name_th"
             optionValue="name_th" placeholder="กรุณาเลือกจังหวัด" filter @change="choosecompanyprovice()"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full " />
         </div>
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อำเภอบริษัท</label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">อำเภอ</label>
           <Dropdown v-model="partner_company_amphure" :options="optionamphurecompany" optionLabel="name_th"
             optionValue="name_th" placeholder="กรุณาเลือกอำเภอ" filter @change="choosecompanyamphure()"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
         </div>
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำบลบริษัท</label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">ตำบล</label>
           <Dropdown v-model="partner_company_district" :options="optiondistrictcompany" optionLabel="name_th"
             optionValue="name_th" placeholder="กรุณาเลือกตำบล" filter @change="choosecompanydistrict()"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full  " />
@@ -408,6 +412,16 @@
 
         </div>
         <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบ logo</label>
+          <img class=" bg-white p-2 shadow mb-4" :src="getImage(logo_prview)"
+            v-if="logo_prview != '' && logo_chooes == ''">
+          <img class=" bg-white p-2 shadow mb-4" :src="logo_chooes" v-if="logo_chooes != ''">
+          <FileUpload mode="basic" name="demo[]" url="/api/upload" chooseLabel="เลือกไฟล์ภาพlogo" :auto="true"
+            class="mt-4 font bg-green-700 border-none hover:bg-green-600" @uploader="chooselogo" :customUpload="true"
+            :fileLimit="1" style="font-size:9px; !important;" v-if="logo == ''" />
+
+        </div>
+        <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
           <img class="bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview)"
             v-if="filecompany_iden_prview != '' && filecompany_chooes == ''"
@@ -419,14 +433,42 @@
           <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
 
         </div>
+        
+        
         <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบ logo</label>
-          <img class=" bg-white p-2 shadow mb-4" :src="getImage(logo_prview)"
-            v-if="logo_prview != '' && logo_chooes == ''">
-          <img class=" bg-white p-2 shadow mb-4" :src="logo_chooes" v-if="logo_chooes != ''">
-          <FileUpload mode="basic" name="demo[]" url="/api/upload" chooseLabel="เลือกไฟล์ภาพlogo" :auto="true"
-            class="mt-4 font bg-green-700 border-none hover:bg-green-600" @uploader="chooselogo" :customUpload="true"
-            :fileLimit="1" style="font-size:9px; !important;" v-if="logo == ''" />
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
+          <img class="bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview2)"
+            v-if="filecompany_iden_prview2 != '' && filecompany_chooes2 == ''"
+            @click="clickdownload(filecompany_iden_prview2)">
+          <img class=" bg-white p-2 shadow mb-4" :src="filecompany_chooes2" v-if="filecompany_chooes2 != ''">
+          <FileUpload mode="basic" name="demo[]" url="/api/upload" chooseLabel="เลือกไฟล์ภาพเอกสารบริษัท" :auto="true"
+            class="mt-4 font bg-green-700 border-none hover:bg-green-600" @uploader="choosefilecompany2"
+            :customUpload="true" :fileLimit="1" style="font-size:9px; !important;" v-if="filecompany2 == ''" />
+          <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
+
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
+          <img class="bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview3)"
+            v-if="filecompany_iden_prview3 != '' && filecompany_chooes3 == ''"
+            @click="clickdownload(filecompany_iden_prview3)">
+          <img class=" bg-white p-2 shadow mb-4" :src="filecompany_chooes3" v-if="filecompany_chooes3 != ''">
+          <FileUpload mode="basic" name="demo[]" url="/api/upload" chooseLabel="เลือกไฟล์ภาพเอกสารบริษัท" :auto="true"
+            class="mt-4 font bg-green-700 border-none hover:bg-green-600" @uploader="choosefilecompany3"
+            :customUpload="true" :fileLimit="1" style="font-size:9px; !important;" v-if="filecompany3 == ''" />
+          <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
+
+        </div>
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">แนบเอกสารบริษัท</label>
+          <img class="bg-white p-2 shadow mb-4" :src="getImage(filecompany_iden_prview4)"
+            v-if="filecompany_iden_prview4 != '' && filecompany_chooes4 == ''"
+            @click="clickdownload(filecompany_iden_prview4)">
+          <img class=" bg-white p-2 shadow mb-4" :src="filecompany_chooes4" v-if="filecompany_chooes4 != ''">
+          <FileUpload mode="basic" name="demo[]" url="/api/upload" chooseLabel="เลือกไฟล์ภาพเอกสารบริษัท" :auto="true"
+            class="mt-4 font bg-green-700 border-none hover:bg-green-600" @uploader="choosefilecompany4"
+            :customUpload="true" :fileLimit="1" style="font-size:9px; !important;" v-if="filecompany4 == ''" />
+          <div v-else class="text-2xl text-blue-700"> คุณได้เลือกเอกสารบริษัท</div>
 
         </div>
       </div>
@@ -1039,9 +1081,7 @@ export default {
       partner_iden: "", // เลขบัตรประชาชน
       partner_iden_prview: "",
       partner_iden_chooes: "",
-      filecompany: "",
-      filecompany_iden_prview: "",
-      filecompany_chooes: "",
+      
       logo: "",
       logo_prview: "",
       logo_chooes: "",
@@ -1069,6 +1109,26 @@ export default {
       transferby: "",
       paid_amount: 0,
       paid_date: "",
+
+      filecompany: "",
+      filecompany_iden_prview: "",
+      filecompany_chooes: "",
+
+      filecompany2: "",
+      filecompany_iden_prview2: "",
+      filecompany_chooes2: "",
+      
+
+      filecompany3: "",
+      filecompany_iden_prview3: "",
+      filecompany_chooes3: "",
+
+
+      filecompany4: "",
+      filecompany_iden_prview4: "",
+      filecompany_chooes4: "",
+  
+
     };
   },
   mounted() {
@@ -1244,6 +1304,9 @@ export default {
 
           this.partner_iden_prview = this.userData.partner_iden;
           this.filecompany_iden_prview = this.userData.filecompany;
+          this.filecompany_iden_prview2 = this.userData.filecompany2;
+          this.filecompany_iden_prview3 = this.userData.filecompany3;
+          this.filecompany_iden_prview4 = this.userData.filecompany4;
           this.logo_prview = this.userData.logo;
 
 
@@ -1301,6 +1364,18 @@ export default {
       this.filecompany = event.files[0];
       this.filecompany_chooes = event.files[0].objectURL;
     },
+    choosefilecompany2(event) {
+      this.filecompany2 = event.files[0];
+      this.filecompany_chooes2 = event.files[0].objectURL;
+    },
+    choosefilecompany3(event) {
+      this.filecompany3 = event.files[0];
+      this.filecompany_chooes3 = event.files[0].objectURL;
+    },
+    choosefilecompany4(event) {
+      this.filecompany4 = event.files[0];
+      this.filecompany_chooes4 = event.files[0].objectURL;
+    },
 
     chooselogo(event) {
       this.logo = event.files[0];
@@ -1334,16 +1409,18 @@ export default {
     },
     async addsignal() {
       this.isLoading = true
-      if (this.signature_name == "" || this.signature_role == "" || this.signature_position == "" || this.signature_sign == "") {
+      if (this.signature_name == "" || this.signature_position == "" || this.signature_sign == "") {
         this.$toast.add({
           severity: 'error',
           summary: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
-          detail: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',
+          detail: 'กรุณากรอกข้อมูลผู้ลงนามให้ครบ',  
           life: 3000,
         });
+        this.isLoading = false;
         return ""
       }
 
+      
       const formData = new FormData();
       formData.append("name", this.signature_name)
       formData.append("role", this.signature_role)
@@ -1351,7 +1428,7 @@ export default {
       formData.append("image", this.signature_sign);
       await this.partner.Addsignature(formData, this._id).then(async (res) => {
         await this.getsignal();
-        console.log("อัพโหลด")
+        
       });
 
       this.signature_name = "";
@@ -1413,6 +1490,17 @@ export default {
             await this.addlogo(this.logo, res.data._id)
           }
 
+          if(this.filecompany2 != ''){
+            await this.addfilecompany2(this.filecompany2, res.data._id);
+          }
+
+          if(this.filecompany3 != ''){
+            await this.addfilecompany3(this.filecompany3, res.data._id);
+          }
+
+          if(this.filecompany4 != ''){
+            await this.addfilecompany4(this.filecompany4, res.data._id);
+          }
           // clear ข้อมูล
           this.partner_iden = "";
           this.partner_iden_chooes = "";
@@ -1460,6 +1548,7 @@ export default {
         console.log("ส่งสำเร็จรูปสำเร็จ")
       });
     },
+
     async addfilecompany(item, id) {
       const formData = new FormData();
       formData.append("image", item);
@@ -1467,6 +1556,31 @@ export default {
         console.log("ส่งสำเร็จรูปสำเร็จ")
       });
     },
+
+    async addfilecompany2(item, id) {
+      const formData = new FormData();
+      formData.append("image", item);
+      await this.partner.Addfilecompany2(formData, id).then(async (res) => {
+        console.log("ส่งสำเร็จรูปสำเร็จ")
+      });
+    },
+    async addfilecompany3(item, id) {
+      const formData = new FormData();
+      formData.append("image", item);
+      await this.partner.Addfilecompany3(formData, id).then(async (res) => {
+        console.log("ส่งสำเร็จรูปสำเร็จ")
+      });
+    },
+
+    async addfilecompany4(item, id) {
+      const formData = new FormData();
+      formData.append("image", item);
+      await this.partner.Addfilecompany4(formData, id).then(async (res) => {
+        console.log("ส่งสำเร็จรูปสำเร็จ")
+      });
+    },
+
+
     async addlogo(item, id) {
       const formData = new FormData();
       formData.append("image", item);

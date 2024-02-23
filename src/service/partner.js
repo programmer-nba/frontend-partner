@@ -236,6 +236,74 @@ export class Partner {
 
     return data;
   }
+
+  async Addfilecompany2(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/filecompany2/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+
+  async Addfilecompany3(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/filecompany3/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+  async Addfilecompany4(packageData,id) {
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl}/partner/filecompany4/${id}`,
+      data: packageData,
+    };
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
   async AddLogo(packageData,id) {
     let data;
     const config = {
