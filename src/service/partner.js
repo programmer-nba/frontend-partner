@@ -378,14 +378,15 @@ export class Partner {
     return data;
   }
 
-  async GetContract(id) {
+  async GetContract(packageData) {
     let data;
     const config = {
-      method: "get",
+      method: "post",
       headers: {
         "token": this.#token,
       },
-      url: `${this.#baseUrl3}/HaveplaceNocapital/GetAllContractNew`,
+      url: `${this.#baseUrl3}/partner-contract/all-me/`,
+      data: packageData,
       
     };
  
@@ -431,7 +432,31 @@ export class Partner {
       headers: {
         "token": this.#token,
       },
-      url: `${this.#baseUrl3}/HaveplaceNocapital/AddStatus/${id}`,
+      url: `${this.#baseUrl3}/partner-contract/sign/${id}`,
+      data: packageData,
+    };
+
+    await axios(config)
+      .then((result) => {
+        if (result) {
+          data = result.data;
+        }
+      })
+      .catch((error) => {
+        data = error;
+      });
+
+    return data;
+  }
+
+  async PaidContract(packageData,id){
+    let data;
+    const config = {
+      method: "put",
+      headers: {
+        "token": this.#token,
+      },
+      url: `${this.#baseUrl3}/partner-contract/paid/${id}`,
       data: packageData,
     };
 
@@ -476,9 +501,9 @@ export class Partner {
     let data;
     const config = {
       method: "get",
-      headers: {
-        "token": this.#token,
-      },
+      // headers: {
+      //   "token": this.#token,
+      // },
       url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_province.json`,
     };
 
@@ -499,9 +524,9 @@ export class Partner {
     let data;
     const config = {
       method: "get",
-      headers: {
-        "token": this.#token,
-      },
+      // headers: {
+      //   "token": this.#token,
+      // },
       url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_amphure.json`,
     };
 
@@ -522,9 +547,9 @@ export class Partner {
     let data;
     const config = {
       method: "get",
-      headers: {
-        "token": this.#token,
-      },
+      // headers: {
+      //   "token": this.#token,
+      // },
       url: `https://raw.githubusercontent.com/kongvut/thai-province-data/master/api_tambon.json`,
     };
 

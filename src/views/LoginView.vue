@@ -120,29 +120,40 @@ const checklogin = async () => {
    
     if (res.data.status === true) {
       
-        if(res.data.data.status_otp == false)
-        {
+        // if(res.data.data.status_otp == false)
+        // {
          
-          isLoading.value = false;
+        //   isLoading.value = false;
          
-          await sendotp(res.data.data._id)
-          telephone.value = res?.data?.data?.partner_phone;
+        //   await sendotp(res.data.data._id)
+        //   telephone.value = res?.data?.data?.partner_phone;
 
-          _id.value = res.data.data._id;
-          token2.value = res.data.token;
+        //   _id.value = res.data.data._id;
+        //   token2.value = res.data.token;
           
-        }else{
-          isLoading.value = false;
-          $toast.add({
+        // }else{
+        //   isLoading.value = false;
+        //   $toast.add({
+        //     severity: 'success',
+        //     summary: 'เข้าสู่ระบบสำเร็จ',
+        //     detail: 'ยินดีต้อนรับสู่ระบบ Partner',
+        //     life: 3000,
+        //     });
+        //     console.log(res.data.token);
+        //     localStorage.setItem('token', res.data.token);
+        //     window.location.assign('/');
+        // }
+        isLoading.value = false;
+        $toast.add({
             severity: 'success',
             summary: 'เข้าสู่ระบบสำเร็จ',
             detail: 'ยินดีต้อนรับสู่ระบบ Partner',
             life: 3000,
             });
-            console.log(res.data.token);
-            localStorage.setItem('token', res.data.token);
-            window.location.assign('/');
-        }
+        // console.log(res.data.token);
+        localStorage.setItem('token', res.data.token);
+        window.location.assign('/');
+
        
       
     } else {

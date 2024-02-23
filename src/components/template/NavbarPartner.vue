@@ -117,7 +117,6 @@ export default {
       {
         this.menuItems =[
           { id: 1, label: 'หน้าแรก', route: '/' },
-          { id: 2, label: 'สัญญา', route: '/Contract/'  },
           { id: 3, label: 'คู่ค้า', subItems: [
               { id: 1, label: 'ลงทะเบียนคู่ค้า', route: '/Dealers' },
               { id: 2, label: 'คู่ค้า', route: '/Dealersview'},
