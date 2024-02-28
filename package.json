@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "deploy:test": "scp -r dist/* root@159.89.193.27:/var/www/partner.tossaguns.com",
-    "deploy:production": "scp -r dist/* nbadigital@147.50.183.54:/var/www/partner.nbadigitalservice.com"
+    "deploy:production": "scp -r dist/* ddscservice@147.50.183.51:/var/www/partner.ddscservices.com"
   },
   "dependencies": {
     "axios": "^1.6.0",
